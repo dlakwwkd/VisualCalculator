@@ -52,6 +52,20 @@
     <Compile Include="CalcForm.Designer.cs">
       <DependentUpon>CalcForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Calculator\Calculator.cs" />
+    <Compile Include="Calculator\ExpressionTree.cs" />
+    <Compile Include="Calculator\ShuntingYardAlgorithm.cs" />
+    <Compile Include="Operator\Binary\IBinaryOper.cs" />
+    <Compile Include="Operand\IOperand.cs" />
+    <Compile Include="Operator\Binary\Div.cs" />
+    <Compile Include="Operator\Binary\Mult.cs" />
+    <Compile Include="Operator\Binary\Minus.cs" />
+    <Compile Include="Operator\Binary\Plus.cs" />
+    <Compile Include="Operator\IOperator.cs" />
+    <Compile Include="Operator\RightParenthesis.cs" />
+    <Compile Include="Operator\LeftParenthesis.cs" />
+    <Compile Include="Operator\Unary\IUnaryOper.cs" />
+    <Compile Include="Operator\Unary\Negation.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="CalcForm.resx">
