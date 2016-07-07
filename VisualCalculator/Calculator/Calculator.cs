@@ -23,8 +23,8 @@ namespace VisualCalculator.Calculator
 
         }
 
-        private List<object>            infixExpression_;
-        private ExpressionTree          exprTree_;
-        private ShuntingYardAlgorithm   sya_;
+        private List<object>            infixExpression_    = new List<object>();
+        private ExpressionTree          exprTree_           = new ExpressionTree();
+        private ShuntingYardAlgorithm   sya_                = new ShuntingYardAlgorithm();
     }
 }

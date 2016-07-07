@@ -50,6 +50,11 @@
             this.c = new System.Windows.Forms.Button();
             this.ce = new System.Windows.Forms.Button();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.rightBracket = new System.Windows.Forms.Button();
+            this.x = new System.Windows.Forms.Button();
+            this.leftBracket = new System.Windows.Forms.Button();
+            this.y = new System.Windows.Forms.Button();
+            this.z = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -63,7 +68,7 @@
             this.expression.Font = new System.Drawing.Font("굴림", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.expression.Location = new System.Drawing.Point(13, 13);
             this.expression.Name = "expression";
-            this.expression.Size = new System.Drawing.Size(218, 52);
+            this.expression.Size = new System.Drawing.Size(274, 52);
             this.expression.TabIndex = 0;
             this.expression.Text = "0";
             this.expression.TextAlign = System.Drawing.ContentAlignment.BottomRight;
@@ -71,7 +76,7 @@
             // negation
             // 
             this.negation.CausesValidation = false;
-            this.negation.Location = new System.Drawing.Point(13, 233);
+            this.negation.Location = new System.Drawing.Point(69, 234);
             this.negation.Name = "negation";
             this.negation.Size = new System.Drawing.Size(50, 35);
             this.negation.TabIndex = 1;
@@ -82,7 +87,7 @@
             // num0
             // 
             this.num0.CausesValidation = false;
-            this.num0.Location = new System.Drawing.Point(69, 233);
+            this.num0.Location = new System.Drawing.Point(125, 234);
             this.num0.Name = "num0";
             this.num0.Size = new System.Drawing.Size(50, 35);
             this.num0.TabIndex = 2;
@@ -93,7 +98,7 @@
             // dot
             // 
             this.dot.CausesValidation = false;
-            this.dot.Location = new System.Drawing.Point(125, 233);
+            this.dot.Location = new System.Drawing.Point(181, 234);
             this.dot.Name = "dot";
             this.dot.Size = new System.Drawing.Size(50, 35);
             this.dot.TabIndex = 3;
@@ -104,7 +109,7 @@
             // enter
             // 
             this.enter.CausesValidation = false;
-            this.enter.Location = new System.Drawing.Point(181, 233);
+            this.enter.Location = new System.Drawing.Point(237, 234);
             this.enter.Name = "enter";
             this.enter.Size = new System.Drawing.Size(50, 35);
             this.enter.TabIndex = 4;
@@ -115,7 +120,7 @@
             // plus
             // 
             this.plus.CausesValidation = false;
-            this.plus.Location = new System.Drawing.Point(181, 195);
+            this.plus.Location = new System.Drawing.Point(237, 196);
             this.plus.Name = "plus";
             this.plus.Size = new System.Drawing.Size(50, 35);
             this.plus.TabIndex = 8;
@@ -126,7 +131,7 @@
             // num3
             // 
             this.num3.CausesValidation = false;
-            this.num3.Location = new System.Drawing.Point(125, 195);
+            this.num3.Location = new System.Drawing.Point(181, 196);
             this.num3.Name = "num3";
             this.num3.Size = new System.Drawing.Size(50, 35);
             this.num3.TabIndex = 7;
@@ -137,7 +142,7 @@
             // num2
             // 
             this.num2.CausesValidation = false;
-            this.num2.Location = new System.Drawing.Point(69, 195);
+            this.num2.Location = new System.Drawing.Point(125, 196);
             this.num2.Name = "num2";
             this.num2.Size = new System.Drawing.Size(50, 35);
             this.num2.TabIndex = 6;
@@ -148,7 +153,7 @@
             // num1
             // 
             this.num1.CausesValidation = false;
-            this.num1.Location = new System.Drawing.Point(13, 195);
+            this.num1.Location = new System.Drawing.Point(69, 196);
             this.num1.Name = "num1";
             this.num1.Size = new System.Drawing.Size(50, 35);
             this.num1.TabIndex = 5;
@@ -159,7 +164,7 @@
             // minus
             // 
             this.minus.CausesValidation = false;
-            this.minus.Location = new System.Drawing.Point(181, 157);
+            this.minus.Location = new System.Drawing.Point(237, 158);
             this.minus.Name = "minus";
             this.minus.Size = new System.Drawing.Size(50, 35);
             this.minus.TabIndex = 12;
@@ -170,7 +175,7 @@
             // num6
             // 
             this.num6.CausesValidation = false;
-            this.num6.Location = new System.Drawing.Point(125, 157);
+            this.num6.Location = new System.Drawing.Point(181, 158);
             this.num6.Name = "num6";
             this.num6.Size = new System.Drawing.Size(50, 35);
             this.num6.TabIndex = 11;
@@ -181,7 +186,7 @@
             // num5
             // 
             this.num5.CausesValidation = false;
-            this.num5.Location = new System.Drawing.Point(69, 157);
+            this.num5.Location = new System.Drawing.Point(125, 158);
             this.num5.Name = "num5";
             this.num5.Size = new System.Drawing.Size(50, 35);
             this.num5.TabIndex = 10;
@@ -192,7 +197,7 @@
             // num4
             // 
             this.num4.CausesValidation = false;
-            this.num4.Location = new System.Drawing.Point(13, 157);
+            this.num4.Location = new System.Drawing.Point(69, 158);
             this.num4.Name = "num4";
             this.num4.Size = new System.Drawing.Size(50, 35);
             this.num4.TabIndex = 9;
@@ -203,7 +208,7 @@
             // mult
             // 
             this.mult.CausesValidation = false;
-            this.mult.Location = new System.Drawing.Point(181, 119);
+            this.mult.Location = new System.Drawing.Point(237, 120);
             this.mult.Name = "mult";
             this.mult.Size = new System.Drawing.Size(50, 35);
             this.mult.TabIndex = 16;
@@ -214,7 +219,7 @@
             // num9
             // 
             this.num9.CausesValidation = false;
-            this.num9.Location = new System.Drawing.Point(125, 119);
+            this.num9.Location = new System.Drawing.Point(181, 120);
             this.num9.Name = "num9";
             this.num9.Size = new System.Drawing.Size(50, 35);
             this.num9.TabIndex = 15;
@@ -225,7 +230,7 @@
             // num8
             // 
             this.num8.CausesValidation = false;
-            this.num8.Location = new System.Drawing.Point(69, 119);
+            this.num8.Location = new System.Drawing.Point(125, 120);
             this.num8.Name = "num8";
             this.num8.Size = new System.Drawing.Size(50, 35);
             this.num8.TabIndex = 14;
@@ -236,7 +241,7 @@
             // num7
             // 
             this.num7.CausesValidation = false;
-            this.num7.Location = new System.Drawing.Point(13, 119);
+            this.num7.Location = new System.Drawing.Point(69, 120);
             this.num7.Name = "num7";
             this.num7.Size = new System.Drawing.Size(50, 35);
             this.num7.TabIndex = 13;
@@ -247,7 +252,7 @@
             // div
             // 
             this.div.CausesValidation = false;
-            this.div.Location = new System.Drawing.Point(181, 81);
+            this.div.Location = new System.Drawing.Point(237, 82);
             this.div.Name = "div";
             this.div.Size = new System.Drawing.Size(50, 35);
             this.div.TabIndex = 20;
@@ -258,7 +263,7 @@
             // erase
             // 
             this.erase.CausesValidation = false;
-            this.erase.Location = new System.Drawing.Point(125, 81);
+            this.erase.Location = new System.Drawing.Point(181, 82);
             this.erase.Name = "erase";
             this.erase.Size = new System.Drawing.Size(50, 35);
             this.erase.TabIndex = 19;
@@ -269,7 +274,7 @@
             // c
             // 
             this.c.CausesValidation = false;
-            this.c.Location = new System.Drawing.Point(69, 81);
+            this.c.Location = new System.Drawing.Point(125, 82);
             this.c.Name = "c";
             this.c.Size = new System.Drawing.Size(50, 35);
             this.c.TabIndex = 18;
@@ -280,7 +285,7 @@
             // ce
             // 
             this.ce.CausesValidation = false;
-            this.ce.Location = new System.Drawing.Point(13, 81);
+            this.ce.Location = new System.Drawing.Point(69, 82);
             this.ce.Name = "ce";
             this.ce.Size = new System.Drawing.Size(50, 35);
             this.ce.TabIndex = 17;
@@ -296,6 +301,11 @@
             // 
             // splitContainer1.Panel1
             // 
+            this.splitContainer1.Panel1.Controls.Add(this.rightBracket);
+            this.splitContainer1.Panel1.Controls.Add(this.x);
+            this.splitContainer1.Panel1.Controls.Add(this.leftBracket);
+            this.splitContainer1.Panel1.Controls.Add(this.y);
+            this.splitContainer1.Panel1.Controls.Add(this.z);
             this.splitContainer1.Panel1.Controls.Add(this.expression);
             this.splitContainer1.Panel1.Controls.Add(this.div);
             this.splitContainer1.Panel1.Controls.Add(this.negation);
@@ -317,15 +327,70 @@
             this.splitContainer1.Panel1.Controls.Add(this.num4);
             this.splitContainer1.Panel1.Controls.Add(this.num6);
             this.splitContainer1.Panel1.Controls.Add(this.num5);
-            this.splitContainer1.Size = new System.Drawing.Size(489, 282);
-            this.splitContainer1.SplitterDistance = 244;
+            this.splitContainer1.Size = new System.Drawing.Size(606, 282);
+            this.splitContainer1.SplitterDistance = 302;
             this.splitContainer1.TabIndex = 21;
+            // 
+            // rightBracket
+            // 
+            this.rightBracket.CausesValidation = false;
+            this.rightBracket.Location = new System.Drawing.Point(13, 234);
+            this.rightBracket.Name = "rightBracket";
+            this.rightBracket.Size = new System.Drawing.Size(50, 35);
+            this.rightBracket.TabIndex = 21;
+            this.rightBracket.Text = ")";
+            this.rightBracket.UseVisualStyleBackColor = true;
+            this.rightBracket.Click += new System.EventHandler(this.rightBracket_Click);
+            // 
+            // x
+            // 
+            this.x.CausesValidation = false;
+            this.x.Location = new System.Drawing.Point(13, 82);
+            this.x.Name = "x";
+            this.x.Size = new System.Drawing.Size(50, 35);
+            this.x.TabIndex = 25;
+            this.x.Text = "x";
+            this.x.UseVisualStyleBackColor = true;
+            this.x.Click += new System.EventHandler(this.x_Click);
+            // 
+            // leftBracket
+            // 
+            this.leftBracket.CausesValidation = false;
+            this.leftBracket.Location = new System.Drawing.Point(13, 196);
+            this.leftBracket.Name = "leftBracket";
+            this.leftBracket.Size = new System.Drawing.Size(50, 35);
+            this.leftBracket.TabIndex = 22;
+            this.leftBracket.Text = "(";
+            this.leftBracket.UseVisualStyleBackColor = true;
+            this.leftBracket.Click += new System.EventHandler(this.leftBracket_Click);
+            // 
+            // y
+            // 
+            this.y.CausesValidation = false;
+            this.y.Location = new System.Drawing.Point(13, 120);
+            this.y.Name = "y";
+            this.y.Size = new System.Drawing.Size(50, 35);
+            this.y.TabIndex = 24;
+            this.y.Text = "y";
+            this.y.UseVisualStyleBackColor = true;
+            this.y.Click += new System.EventHandler(this.y_Click);
+            // 
+            // z
+            // 
+            this.z.CausesValidation = false;
+            this.z.Location = new System.Drawing.Point(13, 158);
+            this.z.Name = "z";
+            this.z.Size = new System.Drawing.Size(50, 35);
+            this.z.TabIndex = 23;
+            this.z.Text = "z";
+            this.z.UseVisualStyleBackColor = true;
+            this.z.Click += new System.EventHandler(this.z_Click);
             // 
             // CalcForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(489, 282);
+            this.ClientSize = new System.Drawing.Size(605, 282);
             this.Controls.Add(this.splitContainer1);
             this.KeyPreview = true;
             this.Name = "CalcForm";
@@ -361,6 +426,11 @@
         private System.Windows.Forms.Button c;
         private System.Windows.Forms.Button ce;
         private System.Windows.Forms.SplitContainer splitContainer1;
+        private System.Windows.Forms.Button rightBracket;
+        private System.Windows.Forms.Button x;
+        private System.Windows.Forms.Button leftBracket;
+        private System.Windows.Forms.Button y;
+        private System.Windows.Forms.Button z;
     }
 }
 

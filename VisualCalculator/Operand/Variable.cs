@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace VisualCalculator.Operator
+namespace VisualCalculator.Operand
 {
-    class LeftParenthesis : IOperator
+    class Variable : IOperand
     {
     }
 }
