@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace VisualCalculator.Operator
 {
-    class RightBracket : IOperator
+    class BracketL : IOperator
     {
     }
 }

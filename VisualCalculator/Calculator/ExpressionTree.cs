@@ -10,6 +10,6 @@ namespace VisualCalculator.Calculator
     {
 
 
-        private List<object> postfixExpression_;
+        private List<object> postfixExpression_ = new List<object>();
     }
 }

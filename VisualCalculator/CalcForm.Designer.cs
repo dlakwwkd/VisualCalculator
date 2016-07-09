@@ -50,9 +50,9 @@
             this.c = new System.Windows.Forms.Button();
             this.ce = new System.Windows.Forms.Button();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.rightBracket = new System.Windows.Forms.Button();
+            this.bracketR = new System.Windows.Forms.Button();
             this.x = new System.Windows.Forms.Button();
-            this.leftBracket = new System.Windows.Forms.Button();
+            this.bracketL = new System.Windows.Forms.Button();
             this.y = new System.Windows.Forms.Button();
             this.z = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -301,9 +301,9 @@
             // 
             // splitContainer1.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.rightBracket);
+            this.splitContainer1.Panel1.Controls.Add(this.bracketR);
             this.splitContainer1.Panel1.Controls.Add(this.x);
-            this.splitContainer1.Panel1.Controls.Add(this.leftBracket);
+            this.splitContainer1.Panel1.Controls.Add(this.bracketL);
             this.splitContainer1.Panel1.Controls.Add(this.y);
             this.splitContainer1.Panel1.Controls.Add(this.z);
             this.splitContainer1.Panel1.Controls.Add(this.expression);
@@ -331,16 +331,16 @@
             this.splitContainer1.SplitterDistance = 302;
             this.splitContainer1.TabIndex = 21;
             // 
-            // rightBracket
+            // bracketR
             // 
-            this.rightBracket.CausesValidation = false;
-            this.rightBracket.Location = new System.Drawing.Point(13, 234);
-            this.rightBracket.Name = "rightBracket";
-            this.rightBracket.Size = new System.Drawing.Size(50, 35);
-            this.rightBracket.TabIndex = 21;
-            this.rightBracket.Text = ")";
-            this.rightBracket.UseVisualStyleBackColor = true;
-            this.rightBracket.Click += new System.EventHandler(this.rightBracket_Click);
+            this.bracketR.CausesValidation = false;
+            this.bracketR.Location = new System.Drawing.Point(13, 234);
+            this.bracketR.Name = "bracketR";
+            this.bracketR.Size = new System.Drawing.Size(50, 35);
+            this.bracketR.TabIndex = 21;
+            this.bracketR.Text = ")";
+            this.bracketR.UseVisualStyleBackColor = true;
+            this.bracketR.Click += new System.EventHandler(this.bracketR_Click);
             // 
             // x
             // 
@@ -353,16 +353,16 @@
             this.x.UseVisualStyleBackColor = true;
             this.x.Click += new System.EventHandler(this.x_Click);
             // 
-            // leftBracket
+            // bracketL
             // 
-            this.leftBracket.CausesValidation = false;
-            this.leftBracket.Location = new System.Drawing.Point(13, 196);
-            this.leftBracket.Name = "leftBracket";
-            this.leftBracket.Size = new System.Drawing.Size(50, 35);
-            this.leftBracket.TabIndex = 22;
-            this.leftBracket.Text = "(";
-            this.leftBracket.UseVisualStyleBackColor = true;
-            this.leftBracket.Click += new System.EventHandler(this.leftBracket_Click);
+            this.bracketL.CausesValidation = false;
+            this.bracketL.Location = new System.Drawing.Point(13, 196);
+            this.bracketL.Name = "bracketL";
+            this.bracketL.Size = new System.Drawing.Size(50, 35);
+            this.bracketL.TabIndex = 22;
+            this.bracketL.Text = "(";
+            this.bracketL.UseVisualStyleBackColor = true;
+            this.bracketL.Click += new System.EventHandler(this.bracketL_Click);
             // 
             // y
             // 
@@ -426,9 +426,9 @@
         private System.Windows.Forms.Button c;
         private System.Windows.Forms.Button ce;
         private System.Windows.Forms.SplitContainer splitContainer1;
-        private System.Windows.Forms.Button rightBracket;
+        private System.Windows.Forms.Button bracketR;
         private System.Windows.Forms.Button x;
-        private System.Windows.Forms.Button leftBracket;
+        private System.Windows.Forms.Button bracketL;
         private System.Windows.Forms.Button y;
         private System.Windows.Forms.Button z;
     }

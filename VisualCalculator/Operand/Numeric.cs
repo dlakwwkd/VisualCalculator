@@ -6,7 +6,14 @@ using System.Threading.Tasks;
 
 namespace VisualCalculator.Operand
 {
-    class Constant : IOperand
+    class Numeric : IOperand
     {
+        public Numeric(string _value)
+        {
+            value_ = double.Parse(_value);
+        }
+
+
+        private double value_;
     }
 }

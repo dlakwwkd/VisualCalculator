@@ -55,7 +55,7 @@
     <Compile Include="Calculator\Calculator.cs" />
     <Compile Include="Calculator\ExpressionTree.cs" />
     <Compile Include="Calculator\ShuntingYardAlgorithm.cs" />
-    <Compile Include="Operand\Constant.cs" />
+    <Compile Include="Operand\Numeric.cs" />
     <Compile Include="Operand\Variable.cs" />
     <Compile Include="Operator\Binary\IBinaryOper.cs" />
     <Compile Include="Operand\IOperand.cs" />
@@ -64,8 +64,8 @@
     <Compile Include="Operator\Binary\Minus.cs" />
     <Compile Include="Operator\Binary\Plus.cs" />
     <Compile Include="Operator\IOperator.cs" />
-    <Compile Include="Operator\RightBracket.cs" />
-    <Compile Include="Operator\LeftBracket.cs" />
+    <Compile Include="Operator\BracketR.cs" />
+    <Compile Include="Operator\BracketL.cs" />
     <Compile Include="Operator\Unary\IUnaryOper.cs" />
     <Compile Include="Operator\Unary\Negation.cs" />
     <Compile Include="Program.cs" />

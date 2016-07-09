@@ -12,6 +12,32 @@ namespace VisualCalculator
 {
     public partial class CalcForm : Form
     {
+        public enum ValueType
+        {
+            NUMERIC,
+            VARIABLE,
+            OPERATOR,
+            DECIMAL,
+            BRACKET_LEFT,
+            BRACKET_RIGHT,
+        }
+        public static bool CheckValueType(char _value, ValueType _type)
+        {
+            try { return VALUE_KINDS[(int)_type].Contains(_value); }
+            catch { return false; }
+        }
+        private static string[] VALUE_KINDS =
+        {
+            "0123456789",   // NUMERIC
+            "xyz",          // VARIABLE
+            "+-*/",         // OPERATOR
+            ".",            // DECIMAL
+            "(",            // BRACKET_LEFT
+            ")",            // BRACKET_RIGHT
+        };
+
+
+
         public CalcForm()
         {
             InitializeComponent();
@@ -24,16 +50,6 @@ namespace VisualCalculator
         }
 
 
-
-        private enum ValueType
-        {
-            NUMERIC,
-            VARIABLE,
-            OPERATOR,
-            DECIMAL,
-            BRACKET_LEFT,
-            BRACKET_RIGHT,
-        }
 
         private void AddValue(char _value, ValueType _type)
         {
@@ -64,18 +80,6 @@ namespace VisualCalculator
                 }
                 expression.Text = expression.Text.Substring(0, expression.Text.Length - 1);
             }
-        }
-
-        private bool IsLastValue(ValueType _type)
-        {
-            try { return valueKind_[(int)_type].Contains(expression.Text.Last()); }
-            catch { return false; }
-        }
-
-        private bool CheckValueType(char _value, ValueType _type)
-        {
-            try { return valueKind_[(int)_type].Contains(_value); }
-            catch { return false; }
         }
 
         private bool CheckAddAble(ValueType _type)
@@ -130,29 +134,35 @@ namespace VisualCalculator
             return true;
         }
 
-        private void num0_Click(object sender, EventArgs e)         { AddValue('0', ValueType.NUMERIC); }
-        private void num1_Click(object sender, EventArgs e)         { AddValue('1', ValueType.NUMERIC); }
-        private void num2_Click(object sender, EventArgs e)         { AddValue('2', ValueType.NUMERIC); }
-        private void num3_Click(object sender, EventArgs e)         { AddValue('3', ValueType.NUMERIC); }
-        private void num4_Click(object sender, EventArgs e)         { AddValue('4', ValueType.NUMERIC); }
-        private void num5_Click(object sender, EventArgs e)         { AddValue('5', ValueType.NUMERIC); }
-        private void num6_Click(object sender, EventArgs e)         { AddValue('6', ValueType.NUMERIC); }
-        private void num7_Click(object sender, EventArgs e)         { AddValue('7', ValueType.NUMERIC); }
-        private void num8_Click(object sender, EventArgs e)         { AddValue('8', ValueType.NUMERIC); }
-        private void num9_Click(object sender, EventArgs e)         { AddValue('9', ValueType.NUMERIC); }
-        private void plus_Click(object sender, EventArgs e)         { AddValue('+', ValueType.OPERATOR); }
-        private void minus_Click(object sender, EventArgs e)        { AddValue('-', ValueType.OPERATOR); }
-        private void mult_Click(object sender, EventArgs e)         { AddValue('*', ValueType.OPERATOR); }
-        private void div_Click(object sender, EventArgs e)          { AddValue('/', ValueType.OPERATOR); }
-        private void x_Click(object sender, EventArgs e)            { AddValue('x', ValueType.VARIABLE); }
-        private void y_Click(object sender, EventArgs e)            { AddValue('y', ValueType.VARIABLE); }
-        private void z_Click(object sender, EventArgs e)            { AddValue('z', ValueType.VARIABLE); }
-        private void dot_Click(object sender, EventArgs e)          { AddValue('.', ValueType.DECIMAL); }
-        private void leftBracket_Click(object sender, EventArgs e)  { AddValue('(', ValueType.BRACKET_LEFT); }
-        private void rightBracket_Click(object sender, EventArgs e) { AddValue(')', ValueType.BRACKET_RIGHT); }
-        private void erase_Click(object sender, EventArgs e)        { RemoveValue(); }
-        private void ce_Click(object sender, EventArgs e)           { SetExpression("0"); bracketStack_ = 0; }
-        private void c_Click(object sender, EventArgs e)            { SetExpression("0"); bracketStack_ = 0; }
+        private bool IsLastValue(ValueType _type)
+        {
+            try { return CheckValueType(expression.Text.Last(), _type); }
+            catch { return false; }
+        }
+
+        private void num0_Click(object sender, EventArgs e)     { AddValue('0', ValueType.NUMERIC); }
+        private void num1_Click(object sender, EventArgs e)     { AddValue('1', ValueType.NUMERIC); }
+        private void num2_Click(object sender, EventArgs e)     { AddValue('2', ValueType.NUMERIC); }
+        private void num3_Click(object sender, EventArgs e)     { AddValue('3', ValueType.NUMERIC); }
+        private void num4_Click(object sender, EventArgs e)     { AddValue('4', ValueType.NUMERIC); }
+        private void num5_Click(object sender, EventArgs e)     { AddValue('5', ValueType.NUMERIC); }
+        private void num6_Click(object sender, EventArgs e)     { AddValue('6', ValueType.NUMERIC); }
+        private void num7_Click(object sender, EventArgs e)     { AddValue('7', ValueType.NUMERIC); }
+        private void num8_Click(object sender, EventArgs e)     { AddValue('8', ValueType.NUMERIC); }
+        private void num9_Click(object sender, EventArgs e)     { AddValue('9', ValueType.NUMERIC); }
+        private void plus_Click(object sender, EventArgs e)     { AddValue('+', ValueType.OPERATOR); }
+        private void minus_Click(object sender, EventArgs e)    { AddValue('-', ValueType.OPERATOR); }
+        private void mult_Click(object sender, EventArgs e)     { AddValue('*', ValueType.OPERATOR); }
+        private void div_Click(object sender, EventArgs e)      { AddValue('/', ValueType.OPERATOR); }
+        private void x_Click(object sender, EventArgs e)        { AddValue('x', ValueType.VARIABLE); }
+        private void y_Click(object sender, EventArgs e)        { AddValue('y', ValueType.VARIABLE); }
+        private void z_Click(object sender, EventArgs e)        { AddValue('z', ValueType.VARIABLE); }
+        private void dot_Click(object sender, EventArgs e)      { AddValue('.', ValueType.DECIMAL); }
+        private void bracketL_Click(object sender, EventArgs e) { AddValue('(', ValueType.BRACKET_LEFT); }
+        private void bracketR_Click(object sender, EventArgs e) { AddValue(')', ValueType.BRACKET_RIGHT); }
+        private void erase_Click(object sender, EventArgs e)    { RemoveValue(); }
+        private void ce_Click(object sender, EventArgs e)       { SetExpression("0"); bracketStack_ = 0; }
+        private void c_Click(object sender, EventArgs e)        { SetExpression("0"); bracketStack_ = 0; }
         private void enter_Click(object sender, EventArgs e)
         {
             bracketStack_ = 0;
@@ -222,11 +232,11 @@ namespace VisualCalculator
             {
                 switch (e.KeyCode)
                 {
-                    case Keys.Oemtilde: negation_Click(sender, e);      break;
-                    case Keys.Oemplus:  plus_Click(sender, e);          break;
-                    case Keys.D8:       mult_Click(sender, e);          break;
-                    case Keys.D9:       leftBracket_Click(sender, e);   break;
-                    case Keys.D0:       rightBracket_Click(sender, e);  break;
+                    case Keys.Oemtilde: negation_Click(sender, e);  break;
+                    case Keys.Oemplus:  plus_Click(sender, e);      break;
+                    case Keys.D8:       mult_Click(sender, e);      break;
+                    case Keys.D9:       bracketL_Click(sender, e);  break;
+                    case Keys.D0:       bracketR_Click(sender, e);  break;
                 }
             }
             else
@@ -259,17 +269,8 @@ namespace VisualCalculator
             }
         }
 
-        private Calculator.Calculator   calculator_ = new Calculator.Calculator();
-        private string[]                valueKind_  =
-        {
-            "0123456789",   // NUMERIC
-            "xyz",          // VARIABLE
-            "+-*/",         // OPERATOR
-            ".",            // DECIMAL
-            "(",            // BRACKET_LEFT
-            ")",            // BRACKET_RIGHT
-        };
-        private int                     bracketStack_   = 0;
+        private Calculator.Calculator   calculator_     = new Calculator.Calculator();
         private bool                    decimalUsed_    = false;
+        private int                     bracketStack_   = 0;
     }
 }

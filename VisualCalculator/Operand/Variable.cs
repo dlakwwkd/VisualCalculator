@@ -8,5 +8,12 @@ namespace VisualCalculator.Operand
 {
     class Variable : IOperand
     {
+        public Variable(char _value)
+        {
+            value_ = _value;
+        }
+
+
+        private char value_;
     }
 }
