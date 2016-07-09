@@ -37,7 +37,7 @@ namespace VisualCalculator
 
         private void AddValue(char _value, ValueType _type)
         {
-            if (expression.Text == "0")
+            if (expression.Text == "0" && _type != ValueType.DECIMAL)
                 expression.Text = "";
 
             if (!CheckAddAble(_type))
@@ -72,12 +72,19 @@ namespace VisualCalculator
             catch { return false; }
         }
 
+        private bool CheckValueType(char _value, ValueType _type)
+        {
+            try { return valueKind_[(int)_type].Contains(_value); }
+            catch { return false; }
+        }
+
         private bool CheckAddAble(ValueType _type)
         {
             switch (_type)
             {
                 case ValueType.NUMERIC:
-                    if (IsLastValue(ValueType.VARIABLE))
+                    if (IsLastValue(ValueType.VARIABLE)
+                        || IsLastValue(ValueType.BRACKET_RIGHT))
                         return false;
 
                     break;
@@ -91,7 +98,8 @@ namespace VisualCalculator
                     break;
                 case ValueType.VARIABLE:
                     if (IsLastValue(ValueType.VARIABLE)
-                        || IsLastValue(ValueType.DECIMAL))
+                        || IsLastValue(ValueType.DECIMAL)
+                        || IsLastValue(ValueType.BRACKET_RIGHT))
                         return false;
 
                     break;
@@ -145,9 +153,67 @@ namespace VisualCalculator
         private void erase_Click(object sender, EventArgs e)        { RemoveValue(); }
         private void ce_Click(object sender, EventArgs e)           { SetExpression("0"); bracketStack_ = 0; }
         private void c_Click(object sender, EventArgs e)            { SetExpression("0"); bracketStack_ = 0; }
-        private void enter_Click(object sender, EventArgs e)        { calculator_.Calculate(); bracketStack_ = 0; }
+        private void enter_Click(object sender, EventArgs e)
+        {
+            bracketStack_ = 0;
+            calculator_.Calculate(expression.Text);
+        }
         private void negation_Click(object sender, EventArgs e)
         {
+            var expr = expression.Text;
+            int idx = expr.Length - 1;
+            if (IsLastValue(ValueType.NUMERIC) || IsLastValue(ValueType.VARIABLE))
+            {
+                while (--idx > 0)
+                {
+                    if (CheckValueType(expr[idx], ValueType.NUMERIC)
+                        || CheckValueType(expr[idx], ValueType.DECIMAL))
+                        continue;
+
+                    ++idx;
+                    break;
+                }
+            }
+            else if (IsLastValue(ValueType.BRACKET_RIGHT))
+            {
+                int bracketStack = 1;
+                while (--idx > 0)
+                {
+                    if (CheckValueType(expr[idx], ValueType.BRACKET_RIGHT))
+                        ++bracketStack;
+
+                    if (CheckValueType(expr[idx], ValueType.BRACKET_LEFT)
+                        && --bracketStack == 0)
+                    {
+                        if (!CheckValueType(expr[idx - 1], ValueType.BRACKET_LEFT)
+                            && !CheckValueType(expr[idx - 1], ValueType.OPERATOR))
+                        {
+                            expr = expr.Insert(idx, "*");
+                            ++idx;
+                        }
+                        break;
+                    }
+                }
+            }
+
+            if (idx == -1)
+                ++idx;
+
+            if (idx == 0 && expr[idx] == '-')
+            {
+                expression.Text = expr.Remove(idx, 1);
+            }
+            else if (idx > 1 && expr[idx - 1] == '-'
+                && !CheckValueType(expr[idx - 2], ValueType.NUMERIC)
+                && !CheckValueType(expr[idx - 2], ValueType.VARIABLE)
+                && !CheckValueType(expr[idx - 2], ValueType.BRACKET_RIGHT))
+            {
+                expression.Text = expr.Remove(idx - 1, 1);
+            }
+            else
+            {
+                expression.Text = expr.Insert(idx, "-");
+            }
         }
 
         private void CalcForm_KeyDown(object sender, KeyEventArgs e)

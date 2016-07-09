@@ -8,9 +8,9 @@ namespace VisualCalculator.Calculator
 {
     class Calculator
     {
-        public bool ParseInfixExprFromString(string _expression)
+        public void Calculate(string _expression)
         {
-            return true;
+            ParseInfixExprFromString(_expression);
         }
 
         public void SetStringFromResult(double _result)
@@ -18,9 +18,12 @@ namespace VisualCalculator.Calculator
 
         }
 
-        public void Calculate()
+        private bool ParseInfixExprFromString(string _expression)
         {
 
+
+
+            return true;
         }
 
         private List<object>            infixExpression_    = new List<object>();
