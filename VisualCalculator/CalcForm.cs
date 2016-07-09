@@ -174,6 +174,9 @@ namespace VisualCalculator
             int idx = expr.Length - 1;
             if (IsLastValue(ValueType.NUMERIC) || IsLastValue(ValueType.VARIABLE))
             {
+                // 숫자인 경우, 해당 숫자의 앞부분의 위치를 idx에 저장한다.
+                // 변수인 경우, 변수의 앞부분 또는 변수와 곱셈연산생략으로 붙어있는 숫자의 앞부분을 찾아낸다.
+                // [예: 32.01 => -32.01 , x => -x , 24y => -24y]
                 while (--idx > 0)
                 {
                     if (CheckValueType(expr[idx], ValueType.NUMERIC)
@@ -186,6 +189,9 @@ namespace VisualCalculator
             }
             else if (IsLastValue(ValueType.BRACKET_RIGHT))
             {
+                // 오른쪽 괄호인 경우, 왼괄호를 찾아 앞부분으로 탐색해나가면서
+                // 왼괄호 전에 오른괄호가 또 나온다면, 그만큼 왼괄호를 생략해줘야 같은 범위의 왼괄호를 찾을 수 있다.
+                // [예: x*(y + z) => x*-(y + z) , x*(y/(z + x)) => x*-(y/(z + x))]
                 int bracketStack = 1;
                 while (--idx > 0)
                 {
@@ -193,11 +199,14 @@ namespace VisualCalculator
                         ++bracketStack;
 
                     if (CheckValueType(expr[idx], ValueType.BRACKET_LEFT)
-                        && --bracketStack == 0)
+                        && --bracketStack == 0) // 이 연산 순서가 바뀌면 안되는 점에 유의(왼괄호 일치확인-> 스택감산-> 0인지 확인)
                     {
                         if (!CheckValueType(expr[idx - 1], ValueType.BRACKET_LEFT)
                             && !CheckValueType(expr[idx - 1], ValueType.OPERATOR))
                         {
+                            // 왼괄호 바로 앞이 왼괄호와 연산자가 아닌 경우(즉, 숫자,변수,오른괄호)에는
+                            // 곱셈연산이 생략된 것이므로, 음수화 전에 곱셈연산을 명시해준다.
+                            // [예: 3(x + y) => 3*-(x + y) , x(y + z) => x*-(y +z) , (x + y)(y + z) => (x + y)*-(y + z)]
                             expr = expr.Insert(idx, "*");
                             ++idx;
                         }
@@ -205,23 +214,33 @@ namespace VisualCalculator
                     }
                 }
             }
+            else
+            {
+                // 나머지는 소수점,왼괄호의 경우 또는 식에 값이 하나도 없는 경우인데
+                // 이 때는 음수화연산이 실행되면 안 되므로 함수를 종료한다.
+                return;
+            }
 
-            if (idx == -1)
-                ++idx;
+            // 식에 값이 하나인 경우였다면, idx가 -1이 되는데, 이를 0으로 바꿔줘야 밑의 연산이 문제없이 된다.
+            if (idx < 0)
+                idx = 0;
 
+            // 음수화부호가 이미 있다면 새로 추가하지 않고 제거한다.
             if (idx == 0 && expr[idx] == '-')
             {
+                // [예: -x => x]
                 expression.Text = expr.Remove(idx, 1);
             }
             else if (idx > 1 && expr[idx - 1] == '-'
-                && !CheckValueType(expr[idx - 2], ValueType.NUMERIC)
-                && !CheckValueType(expr[idx - 2], ValueType.VARIABLE)
-                && !CheckValueType(expr[idx - 2], ValueType.BRACKET_RIGHT))
+                && (CheckValueType(expr[idx - 2], ValueType.OPERATOR)
+                    || CheckValueType(expr[idx - 2], ValueType.BRACKET_LEFT)))
             {
+                // [예: x*-y => x*y , (-x... => (x...]
                 expression.Text = expr.Remove(idx - 1, 1);
             }
             else
             {
+                // 나머지 경우는 음수화부호를 추가해줘야 하는 경우이다.
                 expression.Text = expr.Insert(idx, "-");
             }
         }

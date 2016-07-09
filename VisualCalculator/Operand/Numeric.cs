@@ -8,9 +8,9 @@ namespace VisualCalculator.Operand
 {
     class Numeric : IOperand
     {
-        public Numeric(string _value)
+        public Numeric(double _value)
         {
-            value_ = double.Parse(_value);
+            value_ = _value;
         }
 
 
