@@ -8,5 +8,12 @@ namespace VisualCalculator.Calculator
 {
     class ShuntingYardAlgorithm
     {
+        public void MakePostfixFromInfix(List<object> _infixExpr)
+        {
+
+        }
+
+
+        private List<object> postfixExpression_ = new List<object>();
     }
 }

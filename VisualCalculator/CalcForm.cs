@@ -51,6 +51,13 @@ namespace VisualCalculator
 
 
 
+        private void Init()
+        {
+            decimalUsed_ = false;
+            bracketStack_ = 0;
+            expression.Text = "0";
+        }
+
         private void AddValue(char _value, ValueType _type)
         {
             if (expression.Text == "0" && _type != ValueType.DECIMAL)
@@ -93,7 +100,8 @@ namespace VisualCalculator
 
                     break;
                 case ValueType.OPERATOR:
-                    if (IsLastValue(ValueType.OPERATOR)
+                    if (expression.Text.Length == 0
+                        || IsLastValue(ValueType.OPERATOR)
                         || IsLastValue(ValueType.DECIMAL)
                         || IsLastValue(ValueType.BRACKET_LEFT))
                         return false;
@@ -161,8 +169,8 @@ namespace VisualCalculator
         private void bracketL_Click(object sender, EventArgs e) { AddValue('(', ValueType.BRACKET_LEFT); }
         private void bracketR_Click(object sender, EventArgs e) { AddValue(')', ValueType.BRACKET_RIGHT); }
         private void erase_Click(object sender, EventArgs e)    { RemoveValue(); }
-        private void ce_Click(object sender, EventArgs e)       { SetExpression("0"); bracketStack_ = 0; }
-        private void c_Click(object sender, EventArgs e)        { SetExpression("0"); bracketStack_ = 0; }
+        private void ce_Click(object sender, EventArgs e)       { Init(); }
+        private void c_Click(object sender, EventArgs e)        { Init(); }
         private void enter_Click(object sender, EventArgs e)
         {
             bracketStack_ = 0;

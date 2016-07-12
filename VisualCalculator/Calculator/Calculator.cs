@@ -13,6 +13,7 @@ namespace VisualCalculator.Calculator
             try { ParseInfixExprFromString(_expression); }
             catch { return; }
 
+            sya_.MakePostfixFromInfix(infixExpression_);
         }
 
         public void SetStringFromResult(double _result)

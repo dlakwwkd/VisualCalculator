@@ -8,7 +8,10 @@ namespace VisualCalculator.Operator.Binary
 {
     class Div : IBinaryOper
     {
-        public double Calc(double _left, double _right)
+        public bool     IsLeftAssociative() { return true; }
+        public int      GetPrecedence() { return 3; }
+
+        public double   Calc(double _left, double _right)
         {
             return _left / _right;
         }

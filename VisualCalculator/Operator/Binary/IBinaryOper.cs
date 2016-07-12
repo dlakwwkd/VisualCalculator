@@ -8,6 +8,9 @@ namespace VisualCalculator.Operator.Binary
 {
     interface IBinaryOper : IOperator
     {
-        double Calc(double _left, double _right);
+        bool    IsLeftAssociative();
+        int     GetPrecedence();
+
+        double  Calc(double _left, double _right);
     }
 }
