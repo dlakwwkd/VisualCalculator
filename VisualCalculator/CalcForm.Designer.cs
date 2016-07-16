@@ -55,8 +55,8 @@
             this.y = new System.Windows.Forms.Button();
             this.z = new System.Windows.Forms.Button();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.panel2 = new System.Windows.Forms.Panel();
+            this.panel_sya = new System.Windows.Forms.Panel();
+            this.panel_exprTree = new System.Windows.Forms.Panel();
             this.flowLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -383,27 +383,27 @@
             this.flowLayoutPanel1.Size = new System.Drawing.Size(280, 260);
             this.flowLayoutPanel1.TabIndex = 22;
             // 
-            // panel1
+            // panel_sya
             // 
-            this.panel1.Location = new System.Drawing.Point(298, 12);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(514, 260);
-            this.panel1.TabIndex = 23;
+            this.panel_sya.Location = new System.Drawing.Point(298, 12);
+            this.panel_sya.Name = "panel_sya";
+            this.panel_sya.Size = new System.Drawing.Size(514, 260);
+            this.panel_sya.TabIndex = 23;
             // 
-            // panel2
+            // panel_exprTree
             // 
-            this.panel2.Location = new System.Drawing.Point(12, 278);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(800, 451);
-            this.panel2.TabIndex = 24;
+            this.panel_exprTree.Location = new System.Drawing.Point(12, 278);
+            this.panel_exprTree.Name = "panel_exprTree";
+            this.panel_exprTree.Size = new System.Drawing.Size(800, 451);
+            this.panel_exprTree.TabIndex = 24;
             // 
             // CalcForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(824, 741);
-            this.Controls.Add(this.panel2);
-            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.panel_exprTree);
+            this.Controls.Add(this.panel_sya);
             this.Controls.Add(this.flowLayoutPanel1);
             this.KeyPreview = true;
             this.Name = "CalcForm";
@@ -442,8 +442,8 @@
         private System.Windows.Forms.Button y;
         private System.Windows.Forms.Button z;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Panel panel_sya;
+        private System.Windows.Forms.Panel panel_exprTree;
     }
 }
 

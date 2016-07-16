@@ -12,9 +12,6 @@ namespace VisualCalculator
 {
     public partial class CalcForm : Form
     {
-        //------------------------------------------------------------------------------------
-        // Static Field
-        //------------------------------------------------------------------------------------
         public enum ValueType
         {
             NUMERIC,
@@ -25,6 +22,9 @@ namespace VisualCalculator
             BRACKET_RIGHT,
         }
 
+        //------------------------------------------------------------------------------------
+        // Static Field
+        //------------------------------------------------------------------------------------
         public static bool CheckValueType(char _value, ValueType _type)
         {
             try { return VALUE_KINDS[(int)_type].Contains(_value); }
@@ -60,6 +60,8 @@ namespace VisualCalculator
         {
             InitializeComponent();
             KeyDown += new KeyEventHandler(CalcForm_KeyDown);
+            panel_sya.Paint += new PaintEventHandler(panel_sya_Paint);
+            panel_exprTree.Paint += new PaintEventHandler(panel_exprTree_Paint);
         }
 
         public void SetExpression(string _expression)
@@ -72,6 +74,81 @@ namespace VisualCalculator
         //------------------------------------------------------------------------------------
         // Private Field
         //------------------------------------------------------------------------------------
+
+        // - Input Handler
+        //------------------------------------------------------------------------------------
+        private void CalcForm_KeyDown(object sender, KeyEventArgs e)
+        {
+            if ((ModifierKeys & Keys.Shift) == Keys.Shift)
+            {
+                switch (e.KeyCode)
+                {
+                    case Keys.Oemtilde: negation_Click(sender, e);  break;
+                    case Keys.Oemplus:  plus_Click(sender, e);      break;
+                    case Keys.D8:       mult_Click(sender, e);      break;
+                    case Keys.D9:       bracketL_Click(sender, e);  break;
+                    case Keys.D0:       bracketR_Click(sender, e);  break;
+                }
+            }
+            else
+            {
+                switch (e.KeyCode)
+                {
+                    case Keys.NumPad0:  case Keys.D0:           num0_Click(sender, e);  break;
+                    case Keys.NumPad1:  case Keys.D1:           num1_Click(sender, e);  break;
+                    case Keys.NumPad2:  case Keys.D2:           num2_Click(sender, e);  break;
+                    case Keys.NumPad3:  case Keys.D3:           num3_Click(sender, e);  break;
+                    case Keys.NumPad4:  case Keys.D4:           num4_Click(sender, e);  break;
+                    case Keys.NumPad5:  case Keys.D5:           num5_Click(sender, e);  break;
+                    case Keys.NumPad6:  case Keys.D6:           num6_Click(sender, e);  break;
+                    case Keys.NumPad7:  case Keys.D7:           num7_Click(sender, e);  break;
+                    case Keys.NumPad8:  case Keys.D8:           num8_Click(sender, e);  break;
+                    case Keys.NumPad9:  case Keys.D9:           num9_Click(sender, e);  break;
+                    case Keys.Add:      /* Shift + Oemplus */   plus_Click(sender, e);  break;
+                    case Keys.Subtract: case Keys.OemMinus:     minus_Click(sender, e); break;
+                    case Keys.Multiply: /* Shift + D8 */        mult_Click(sender, e);  break;
+                    case Keys.Divide:   case Keys.OemQuestion:  div_Click(sender, e);   break;
+                    case Keys.Decimal:  case Keys.OemPeriod:    dot_Click(sender, e);   break;
+                    case Keys.X:                                x_Click(sender, e);     break;
+                    case Keys.Y:                                y_Click(sender, e);     break;
+                    case Keys.Z:                                z_Click(sender, e);     break;
+                    case Keys.Back:                             erase_Click(sender, e); break;
+                    case Keys.Delete:                           ce_Click(sender, e);    break;
+                    case Keys.Escape:                           c_Click(sender, e);     break;
+                    case Keys.Enter:    case Keys.Oemplus:      enter_Click(sender, e); break;
+                }
+            }
+        }
+        private void num0_Click(object sender, EventArgs e)     { AddValue('0', ValueType.NUMERIC); }
+        private void num1_Click(object sender, EventArgs e)     { AddValue('1', ValueType.NUMERIC); }
+        private void num2_Click(object sender, EventArgs e)     { AddValue('2', ValueType.NUMERIC); }
+        private void num3_Click(object sender, EventArgs e)     { AddValue('3', ValueType.NUMERIC); }
+        private void num4_Click(object sender, EventArgs e)     { AddValue('4', ValueType.NUMERIC); }
+        private void num5_Click(object sender, EventArgs e)     { AddValue('5', ValueType.NUMERIC); }
+        private void num6_Click(object sender, EventArgs e)     { AddValue('6', ValueType.NUMERIC); }
+        private void num7_Click(object sender, EventArgs e)     { AddValue('7', ValueType.NUMERIC); }
+        private void num8_Click(object sender, EventArgs e)     { AddValue('8', ValueType.NUMERIC); }
+        private void num9_Click(object sender, EventArgs e)     { AddValue('9', ValueType.NUMERIC); }
+        private void plus_Click(object sender, EventArgs e)     { AddValue('+', ValueType.OPERATOR); }
+        private void minus_Click(object sender, EventArgs e)    { AddValue('-', ValueType.OPERATOR); }
+        private void mult_Click(object sender, EventArgs e)     { AddValue('*', ValueType.OPERATOR); }
+        private void div_Click(object sender, EventArgs e)      { AddValue('/', ValueType.OPERATOR); }
+        private void x_Click(object sender, EventArgs e)        { AddValue('x', ValueType.VARIABLE); }
+        private void y_Click(object sender, EventArgs e)        { AddValue('y', ValueType.VARIABLE); }
+        private void z_Click(object sender, EventArgs e)        { AddValue('z', ValueType.VARIABLE); }
+        private void dot_Click(object sender, EventArgs e)      { AddValue('.', ValueType.DECIMAL); }
+        private void bracketL_Click(object sender, EventArgs e) { AddValue('(', ValueType.BRACKET_LEFT); }
+        private void bracketR_Click(object sender, EventArgs e) { AddValue(')', ValueType.BRACKET_RIGHT); }
+        private void negation_Click(object sender, EventArgs e) { NegationProc(); }
+        private void erase_Click(object sender, EventArgs e)    { RemoveValue(); }
+        private void ce_Click(object sender, EventArgs e)       { Init(); }
+        private void c_Click(object sender, EventArgs e)        { Init(); }
+        private void enter_Click(object sender, EventArgs e)
+        {
+            bracketStack_ = 0;
+            calculator_.Calculate(expression.Text);
+        }
+
         private void Init()
         {
             decimalUsed_ = false;
@@ -91,9 +168,9 @@ namespace VisualCalculator
 
                 switch (_type)
                 {
-                    case ValueType.DECIMAL:         decimalUsed_ = true;    break;
-                    case ValueType.BRACKET_LEFT:    ++bracketStack_;        break;
-                    case ValueType.BRACKET_RIGHT:   --bracketStack_;        break;
+                    case ValueType.DECIMAL: decimalUsed_ = true; break;
+                    case ValueType.BRACKET_LEFT: ++bracketStack_; break;
+                    case ValueType.BRACKET_RIGHT: --bracketStack_; break;
                 }
                 expression.Text += _value;
             }
@@ -106,9 +183,9 @@ namespace VisualCalculator
             {
                 switch (GetValueType(expr.Last()))
                 {
-                    case ValueType.DECIMAL:         decimalUsed_ = false;   break;
-                    case ValueType.BRACKET_LEFT:    --bracketStack_;        break;
-                    case ValueType.BRACKET_RIGHT:   ++bracketStack_;        break;
+                    case ValueType.DECIMAL: decimalUsed_ = false; break;
+                    case ValueType.BRACKET_LEFT: --bracketStack_; break;
+                    case ValueType.BRACKET_RIGHT: ++bracketStack_; break;
                 }
                 expression.Text = expr.Substring(0, expr.Length - 1);
             }
@@ -253,86 +330,44 @@ namespace VisualCalculator
                 expression.Text = expr.Insert(idx, "-");
             }
         }
-        
 
 
-        private void CalcForm_KeyDown(object sender, KeyEventArgs e)
+
+        // - Draw Handler
+        //------------------------------------------------------------------------------------
+        private void panel_sya_Paint(object sender, PaintEventArgs e)
         {
-            if ((ModifierKeys & Keys.Shift) == Keys.Shift)
-            {
-                switch (e.KeyCode)
-                {
-                    case Keys.Oemtilde: negation_Click(sender, e);  break;
-                    case Keys.Oemplus:  plus_Click(sender, e);      break;
-                    case Keys.D8:       mult_Click(sender, e);      break;
-                    case Keys.D9:       bracketL_Click(sender, e);  break;
-                    case Keys.D0:       bracketR_Click(sender, e);  break;
-                }
-            }
-            else
-            {
-                switch (e.KeyCode)
-                {
-                    case Keys.NumPad0:  case Keys.D0:           num0_Click(sender, e);  break;
-                    case Keys.NumPad1:  case Keys.D1:           num1_Click(sender, e);  break;
-                    case Keys.NumPad2:  case Keys.D2:           num2_Click(sender, e);  break;
-                    case Keys.NumPad3:  case Keys.D3:           num3_Click(sender, e);  break;
-                    case Keys.NumPad4:  case Keys.D4:           num4_Click(sender, e);  break;
-                    case Keys.NumPad5:  case Keys.D5:           num5_Click(sender, e);  break;
-                    case Keys.NumPad6:  case Keys.D6:           num6_Click(sender, e);  break;
-                    case Keys.NumPad7:  case Keys.D7:           num7_Click(sender, e);  break;
-                    case Keys.NumPad8:  case Keys.D8:           num8_Click(sender, e);  break;
-                    case Keys.NumPad9:  case Keys.D9:           num9_Click(sender, e);  break;
-                    case Keys.Add:      /* Shift + Oemplus */   plus_Click(sender, e);  break;
-                    case Keys.Subtract: case Keys.OemMinus:     minus_Click(sender, e); break;
-                    case Keys.Multiply: /* Shift + D8 */        mult_Click(sender, e);  break;
-                    case Keys.Divide:   case Keys.OemQuestion:  div_Click(sender, e);   break;
-                    case Keys.Decimal:  case Keys.OemPeriod:    dot_Click(sender, e);   break;
-                    case Keys.X:                                x_Click(sender, e);     break;
-                    case Keys.Y:                                y_Click(sender, e);     break;
-                    case Keys.Z:                                z_Click(sender, e);     break;
-                    case Keys.Back:                             erase_Click(sender, e); break;
-                    case Keys.Delete:                           ce_Click(sender, e);    break;
-                    case Keys.Escape:                           c_Click(sender, e);     break;
-                    case Keys.Enter:    case Keys.Oemplus:      enter_Click(sender, e); break;
-                }
-            }
+            var p = sender as Panel;
+            var g = e.Graphics;
+            var h = expression.Height;
+
+            var s1 = new Point(0, h);
+            var e1 = new Point(p.Width, h);
+            g.DrawLine(pen_, s1.X, s1.Y, e1.X, e1.Y);
+
+            var arcSize = new Size(p.Width, p.Height - h);
+            var arc1 = new Rectangle(new Point(p.Width / -2, h), arcSize);
+            var arc2 = new Rectangle(new Point(p.Width / +2, h), arcSize);
+            g.DrawArc(pen_, arc1, -90, +90);
+            g.DrawArc(pen_, arc2, -90, -90);
+
+            var s2 = new Point(p.Width / 2, (p.Height + h) / 2);
+            var e2 = new Point(p.Width / 2, p.Height);
+            g.DrawLine(pen_, s2.X, s2.Y, e2.X, e2.Y);
         }
 
-        private void num0_Click(object sender, EventArgs e)     { AddValue('0', ValueType.NUMERIC); }
-        private void num1_Click(object sender, EventArgs e)     { AddValue('1', ValueType.NUMERIC); }
-        private void num2_Click(object sender, EventArgs e)     { AddValue('2', ValueType.NUMERIC); }
-        private void num3_Click(object sender, EventArgs e)     { AddValue('3', ValueType.NUMERIC); }
-        private void num4_Click(object sender, EventArgs e)     { AddValue('4', ValueType.NUMERIC); }
-        private void num5_Click(object sender, EventArgs e)     { AddValue('5', ValueType.NUMERIC); }
-        private void num6_Click(object sender, EventArgs e)     { AddValue('6', ValueType.NUMERIC); }
-        private void num7_Click(object sender, EventArgs e)     { AddValue('7', ValueType.NUMERIC); }
-        private void num8_Click(object sender, EventArgs e)     { AddValue('8', ValueType.NUMERIC); }
-        private void num9_Click(object sender, EventArgs e)     { AddValue('9', ValueType.NUMERIC); }
-        private void plus_Click(object sender, EventArgs e)     { AddValue('+', ValueType.OPERATOR); }
-        private void minus_Click(object sender, EventArgs e)    { AddValue('-', ValueType.OPERATOR); }
-        private void mult_Click(object sender, EventArgs e)     { AddValue('*', ValueType.OPERATOR); }
-        private void div_Click(object sender, EventArgs e)      { AddValue('/', ValueType.OPERATOR); }
-        private void x_Click(object sender, EventArgs e)        { AddValue('x', ValueType.VARIABLE); }
-        private void y_Click(object sender, EventArgs e)        { AddValue('y', ValueType.VARIABLE); }
-        private void z_Click(object sender, EventArgs e)        { AddValue('z', ValueType.VARIABLE); }
-        private void dot_Click(object sender, EventArgs e)      { AddValue('.', ValueType.DECIMAL); }
-        private void bracketL_Click(object sender, EventArgs e) { AddValue('(', ValueType.BRACKET_LEFT); }
-        private void bracketR_Click(object sender, EventArgs e) { AddValue(')', ValueType.BRACKET_RIGHT); }
-        private void negation_Click(object sender, EventArgs e) { NegationProc(); }
-        private void erase_Click(object sender, EventArgs e)    { RemoveValue(); }
-        private void ce_Click(object sender, EventArgs e)       { Init(); }
-        private void c_Click(object sender, EventArgs e)        { Init(); }
-        private void enter_Click(object sender, EventArgs e)
+        private void panel_exprTree_Paint(object sender, PaintEventArgs e)
         {
-            bracketStack_ = 0;
-            calculator_.Calculate(expression.Text);
         }
 
 
 
+        // - Variable
+        //------------------------------------------------------------------------------------
         private Calculator.Calculator   calculator_     = new Calculator.Calculator();
         private bool                    decimalUsed_    = false;
         private int                     bracketStack_   = 0;
+
+        private Pen                     pen_            = new Pen(Color.Black);
     }
 }
