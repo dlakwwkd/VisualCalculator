@@ -54,10 +54,10 @@
             this.bracketL = new System.Windows.Forms.Button();
             this.y = new System.Windows.Forms.Button();
             this.z = new System.Windows.Forms.Button();
-            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.panel_calc = new System.Windows.Forms.FlowLayoutPanel();
             this.panel_sya = new System.Windows.Forms.Panel();
             this.panel_exprTree = new System.Windows.Forms.Panel();
-            this.flowLayoutPanel1.SuspendLayout();
+            this.panel_calc.SuspendLayout();
             this.SuspendLayout();
             // 
             // expression
@@ -348,40 +348,40 @@
             this.z.UseVisualStyleBackColor = true;
             this.z.Click += new System.EventHandler(this.z_Click);
             // 
-            // flowLayoutPanel1
+            // panel_calc
             // 
-            this.flowLayoutPanel1.CausesValidation = false;
-            this.flowLayoutPanel1.Controls.Add(this.expression);
-            this.flowLayoutPanel1.Controls.Add(this.x);
-            this.flowLayoutPanel1.Controls.Add(this.ce);
-            this.flowLayoutPanel1.Controls.Add(this.c);
-            this.flowLayoutPanel1.Controls.Add(this.erase);
-            this.flowLayoutPanel1.Controls.Add(this.div);
-            this.flowLayoutPanel1.Controls.Add(this.y);
-            this.flowLayoutPanel1.Controls.Add(this.num7);
-            this.flowLayoutPanel1.Controls.Add(this.num8);
-            this.flowLayoutPanel1.Controls.Add(this.num9);
-            this.flowLayoutPanel1.Controls.Add(this.mult);
-            this.flowLayoutPanel1.Controls.Add(this.z);
-            this.flowLayoutPanel1.Controls.Add(this.num4);
-            this.flowLayoutPanel1.Controls.Add(this.num5);
-            this.flowLayoutPanel1.Controls.Add(this.num6);
-            this.flowLayoutPanel1.Controls.Add(this.minus);
-            this.flowLayoutPanel1.Controls.Add(this.bracketL);
-            this.flowLayoutPanel1.Controls.Add(this.num1);
-            this.flowLayoutPanel1.Controls.Add(this.num2);
-            this.flowLayoutPanel1.Controls.Add(this.num3);
-            this.flowLayoutPanel1.Controls.Add(this.plus);
-            this.flowLayoutPanel1.Controls.Add(this.bracketR);
-            this.flowLayoutPanel1.Controls.Add(this.negation);
-            this.flowLayoutPanel1.Controls.Add(this.num0);
-            this.flowLayoutPanel1.Controls.Add(this.dot);
-            this.flowLayoutPanel1.Controls.Add(this.enter);
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(12, 12);
-            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Padding = new System.Windows.Forms.Padding(0, 3, 0, 3);
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(280, 260);
-            this.flowLayoutPanel1.TabIndex = 22;
+            this.panel_calc.CausesValidation = false;
+            this.panel_calc.Controls.Add(this.expression);
+            this.panel_calc.Controls.Add(this.x);
+            this.panel_calc.Controls.Add(this.ce);
+            this.panel_calc.Controls.Add(this.c);
+            this.panel_calc.Controls.Add(this.erase);
+            this.panel_calc.Controls.Add(this.div);
+            this.panel_calc.Controls.Add(this.y);
+            this.panel_calc.Controls.Add(this.num7);
+            this.panel_calc.Controls.Add(this.num8);
+            this.panel_calc.Controls.Add(this.num9);
+            this.panel_calc.Controls.Add(this.mult);
+            this.panel_calc.Controls.Add(this.z);
+            this.panel_calc.Controls.Add(this.num4);
+            this.panel_calc.Controls.Add(this.num5);
+            this.panel_calc.Controls.Add(this.num6);
+            this.panel_calc.Controls.Add(this.minus);
+            this.panel_calc.Controls.Add(this.bracketL);
+            this.panel_calc.Controls.Add(this.num1);
+            this.panel_calc.Controls.Add(this.num2);
+            this.panel_calc.Controls.Add(this.num3);
+            this.panel_calc.Controls.Add(this.plus);
+            this.panel_calc.Controls.Add(this.bracketR);
+            this.panel_calc.Controls.Add(this.negation);
+            this.panel_calc.Controls.Add(this.num0);
+            this.panel_calc.Controls.Add(this.dot);
+            this.panel_calc.Controls.Add(this.enter);
+            this.panel_calc.Location = new System.Drawing.Point(12, 12);
+            this.panel_calc.Name = "panel_calc";
+            this.panel_calc.Padding = new System.Windows.Forms.Padding(0, 3, 0, 3);
+            this.panel_calc.Size = new System.Drawing.Size(280, 260);
+            this.panel_calc.TabIndex = 22;
             // 
             // panel_sya
             // 
@@ -404,11 +404,11 @@
             this.ClientSize = new System.Drawing.Size(824, 741);
             this.Controls.Add(this.panel_exprTree);
             this.Controls.Add(this.panel_sya);
-            this.Controls.Add(this.flowLayoutPanel1);
+            this.Controls.Add(this.panel_calc);
             this.KeyPreview = true;
             this.Name = "CalcForm";
             this.Text = "Calculator";
-            this.flowLayoutPanel1.ResumeLayout(false);
+            this.panel_calc.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -441,7 +441,7 @@
         private System.Windows.Forms.Button bracketL;
         private System.Windows.Forms.Button y;
         private System.Windows.Forms.Button z;
-        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
+        private System.Windows.Forms.FlowLayoutPanel panel_calc;
         private System.Windows.Forms.Panel panel_sya;
         private System.Windows.Forms.Panel panel_exprTree;
     }

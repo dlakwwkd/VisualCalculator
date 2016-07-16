@@ -119,36 +119,32 @@ namespace VisualCalculator
                 }
             }
         }
-        private void num0_Click(object sender, EventArgs e)     { AddValue('0', ValueType.NUMERIC); }
-        private void num1_Click(object sender, EventArgs e)     { AddValue('1', ValueType.NUMERIC); }
-        private void num2_Click(object sender, EventArgs e)     { AddValue('2', ValueType.NUMERIC); }
-        private void num3_Click(object sender, EventArgs e)     { AddValue('3', ValueType.NUMERIC); }
-        private void num4_Click(object sender, EventArgs e)     { AddValue('4', ValueType.NUMERIC); }
-        private void num5_Click(object sender, EventArgs e)     { AddValue('5', ValueType.NUMERIC); }
-        private void num6_Click(object sender, EventArgs e)     { AddValue('6', ValueType.NUMERIC); }
-        private void num7_Click(object sender, EventArgs e)     { AddValue('7', ValueType.NUMERIC); }
-        private void num8_Click(object sender, EventArgs e)     { AddValue('8', ValueType.NUMERIC); }
-        private void num9_Click(object sender, EventArgs e)     { AddValue('9', ValueType.NUMERIC); }
-        private void plus_Click(object sender, EventArgs e)     { AddValue('+', ValueType.OPERATOR); }
-        private void minus_Click(object sender, EventArgs e)    { AddValue('-', ValueType.OPERATOR); }
-        private void mult_Click(object sender, EventArgs e)     { AddValue('*', ValueType.OPERATOR); }
-        private void div_Click(object sender, EventArgs e)      { AddValue('/', ValueType.OPERATOR); }
-        private void x_Click(object sender, EventArgs e)        { AddValue('x', ValueType.VARIABLE); }
-        private void y_Click(object sender, EventArgs e)        { AddValue('y', ValueType.VARIABLE); }
-        private void z_Click(object sender, EventArgs e)        { AddValue('z', ValueType.VARIABLE); }
-        private void dot_Click(object sender, EventArgs e)      { AddValue('.', ValueType.DECIMAL); }
-        private void bracketL_Click(object sender, EventArgs e) { AddValue('(', ValueType.BRACKET_LEFT); }
-        private void bracketR_Click(object sender, EventArgs e) { AddValue(')', ValueType.BRACKET_RIGHT); }
-        private void negation_Click(object sender, EventArgs e) { NegationProc(); }
-        private void erase_Click(object sender, EventArgs e)    { RemoveValue(); }
-        private void ce_Click(object sender, EventArgs e)       { Init(); }
-        private void c_Click(object sender, EventArgs e)        { Init(); }
-        private void enter_Click(object sender, EventArgs e)
-        {
-            bracketStack_ = 0;
-            calculator_.Calculate(expression.Text);
-        }
-
+        private void num0_Click(object sender, EventArgs e)     { if (inputEnable_) AddValue('0', ValueType.NUMERIC); }
+        private void num1_Click(object sender, EventArgs e)     { if (inputEnable_) AddValue('1', ValueType.NUMERIC); }
+        private void num2_Click(object sender, EventArgs e)     { if (inputEnable_) AddValue('2', ValueType.NUMERIC); }
+        private void num3_Click(object sender, EventArgs e)     { if (inputEnable_) AddValue('3', ValueType.NUMERIC); }
+        private void num4_Click(object sender, EventArgs e)     { if (inputEnable_) AddValue('4', ValueType.NUMERIC); }
+        private void num5_Click(object sender, EventArgs e)     { if (inputEnable_) AddValue('5', ValueType.NUMERIC); }
+        private void num6_Click(object sender, EventArgs e)     { if (inputEnable_) AddValue('6', ValueType.NUMERIC); }
+        private void num7_Click(object sender, EventArgs e)     { if (inputEnable_) AddValue('7', ValueType.NUMERIC); }
+        private void num8_Click(object sender, EventArgs e)     { if (inputEnable_) AddValue('8', ValueType.NUMERIC); }
+        private void num9_Click(object sender, EventArgs e)     { if (inputEnable_) AddValue('9', ValueType.NUMERIC); }
+        private void plus_Click(object sender, EventArgs e)     { if (inputEnable_) AddValue('+', ValueType.OPERATOR); }
+        private void minus_Click(object sender, EventArgs e)    { if (inputEnable_) AddValue('-', ValueType.OPERATOR); }
+        private void mult_Click(object sender, EventArgs e)     { if (inputEnable_) AddValue('*', ValueType.OPERATOR); }
+        private void div_Click(object sender, EventArgs e)      { if (inputEnable_) AddValue('/', ValueType.OPERATOR); }
+        private void x_Click(object sender, EventArgs e)        { if (inputEnable_) AddValue('x', ValueType.VARIABLE); }
+        private void y_Click(object sender, EventArgs e)        { if (inputEnable_) AddValue('y', ValueType.VARIABLE); }
+        private void z_Click(object sender, EventArgs e)        { if (inputEnable_) AddValue('z', ValueType.VARIABLE); }
+        private void dot_Click(object sender, EventArgs e)      { if (inputEnable_) AddValue('.', ValueType.DECIMAL); }
+        private void bracketL_Click(object sender, EventArgs e) { if (inputEnable_) AddValue('(', ValueType.BRACKET_LEFT); }
+        private void bracketR_Click(object sender, EventArgs e) { if (inputEnable_) AddValue(')', ValueType.BRACKET_RIGHT); }
+        private void negation_Click(object sender, EventArgs e) { if (inputEnable_) NegationProc(); }
+        private void erase_Click(object sender, EventArgs e)    { if (inputEnable_) RemoveValue(); }
+        private void ce_Click(object sender, EventArgs e)       { if (inputEnable_) Init(); }
+        private void c_Click(object sender, EventArgs e)        { if (inputEnable_) Init(); }
+        private void enter_Click(object sender, EventArgs e)    { if (inputEnable_) EnterProc(); }
+        
         private void Init()
         {
             decimalUsed_ = false;
@@ -331,6 +327,14 @@ namespace VisualCalculator
             }
         }
 
+        private async void EnterProc()
+        {
+            bracketStack_ = 0;
+            inputEnable_ = false;
+            await calculator_.Run(expression.Text);
+            inputEnable_ = true;
+        }
+
 
 
         // - Draw Handler
@@ -339,7 +343,7 @@ namespace VisualCalculator
         {
             var p = sender as Panel;
             var g = e.Graphics;
-            var h = expression.Height;
+            var h = expression.Height * 2;
 
             var s1 = new Point(0, h);
             var e1 = new Point(p.Width, h);
@@ -365,6 +369,7 @@ namespace VisualCalculator
         // - Variable
         //------------------------------------------------------------------------------------
         private Calculator.Calculator   calculator_     = new Calculator.Calculator();
+        private bool                    inputEnable_     = true;
         private bool                    decimalUsed_    = false;
         private int                     bracketStack_   = 0;
 

@@ -11,7 +11,7 @@ namespace VisualCalculator.Calculator
         //------------------------------------------------------------------------------------
         // Public Field
         //------------------------------------------------------------------------------------
-        public void Calculate(string _expression)
+        public async Task Run(string _expression)
         {
             try
             {
@@ -23,7 +23,7 @@ namespace VisualCalculator.Calculator
                 return;
             }
 
-            sya_.MakePostfixFromInfix(infixExpression_);
+            await sya_.Run(infixExpression_);
         }
 
         public void SetStringFromResult(double _result)
