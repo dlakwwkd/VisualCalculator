@@ -33,7 +33,7 @@ namespace VisualCalculator.Calculator
             while (++j < _expr.Length)
             {
                 if (!(Calculator.CheckValueType(_expr[j], Calculator.ValueType.NUMERIC)
-                    || Calculator.CheckValueType(_expr[j], Calculator.ValueType.DECIMAL)))
+                        || Calculator.CheckValueType(_expr[j], Calculator.ValueType.DECIMAL)))
                     break;
             }
             var value = double.Parse(_expr.Substring(_index, j - _index));
@@ -61,10 +61,10 @@ namespace VisualCalculator.Calculator
                 case '*': _infixExpr.Add(new Operator.Binary.Mult()); break;
                 case '/': _infixExpr.Add(new Operator.Binary.Div()); break;
                 case '-':
-                    if (_index == 0      // 가장 앞인 경우(예: '-'x + y)
-                        || _index > 0    // 바로 앞이 또 연산자이거나 왼쪽괄호인 경우(예: x'*-'y , x*'(-'y + z))
-                        && (Calculator.CheckValueType(_expr[_index - 1], Calculator.ValueType.OPERATOR)
-                            || Calculator.CheckValueType(_expr[_index - 1], Calculator.ValueType.OPERATOR)))
+                    if (_index == 0     // 가장 앞인 경우(예: '-'x + y)
+                        || (_index > 0  // 바로 앞이 또 연산자이거나 왼쪽괄호인 경우(예: x'*-'y , x*'(-'y + z))
+                            && (Calculator.CheckValueType(_expr[_index - 1], Calculator.ValueType.OPERATOR)
+                                || Calculator.CheckValueType(_expr[_index - 1], Calculator.ValueType.BRACKET_LEFT))))
                     {
                         _infixExpr.Add(new Operator.Unary.Negation());
                     }
