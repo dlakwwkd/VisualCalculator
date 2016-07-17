@@ -190,9 +190,9 @@ namespace VisualCalculator.Calculator
                 {
                     var curPos = item.Location;
                     if (curPos.X > spot)
-                        speed += 0.3f;
+                        speed += 0.5f;
                     else
-                        speed -= 0.3f;
+                        speed -= 0.4f;
                     item.Location = new Point(curPos.X - (int)(speed + 3), curPos.Y);
                     await Task.Delay(10);
                 }
@@ -213,12 +213,12 @@ namespace VisualCalculator.Calculator
                 var goalPos = stackPanel_.Location;
                 goalPos.Y -= stackPanel_.Height;
 
-                var speedX = 13.0f;
+                var speedX = 18.0f;
                 var speedY = 0.0f;
                 while (item.Location.Y < goalPos.Y)
                 {
                     var curPos = item.Location;
-                    speedX -= 0.3f;
+                    speedX -= 0.35f;
                     speedY += 0.2f;
                     item.Location = new Point(curPos.X - (int)(speedX), curPos.Y + (int)(speedY));
                     await Task.Delay(10);
@@ -245,7 +245,7 @@ namespace VisualCalculator.Calculator
                 while (item.Location.X > goalPos.X)
                 {
                     var curPos = item.Location;
-                    speedX += 0.2f;
+                    speedX += 0.25f;
                     speedY -= 0.2f;
                     item.Location = new Point(curPos.X - (int)(speedX), curPos.Y - (int)(speedY));
                     await Task.Delay(10);
@@ -268,7 +268,7 @@ namespace VisualCalculator.Calculator
             syaPanel.Controls.Add(item2);
             item1.Location = infixPanel_.Location;
             item2.Location = new Point(stackPanel_.Location.X, stackPanel_.Location.Y - stackPanel_.Height / 2);
-            for (int i = 0; i < 50; ++i)
+            for (int i = 0; i < 30; ++i)
             {
                 item1.Location = new Point(item1.Location.X - 1, item1.Location.Y + 1);
                 item2.Location = new Point(item2.Location.X + 1, item2.Location.Y - 1);

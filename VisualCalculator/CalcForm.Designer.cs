@@ -56,10 +56,10 @@
             this.z = new System.Windows.Forms.Button();
             this.panel_calc = new System.Windows.Forms.FlowLayoutPanel();
             this.panel_sya = new System.Windows.Forms.Panel();
-            this.panel_exprTree = new System.Windows.Forms.Panel();
-            this.infixLabel = new System.Windows.Forms.Label();
-            this.postfixLabel = new System.Windows.Forms.Label();
             this.stackLabel = new System.Windows.Forms.Label();
+            this.postfixLabel = new System.Windows.Forms.Label();
+            this.infixLabel = new System.Windows.Forms.Label();
+            this.panel_exprTree = new System.Windows.Forms.Panel();
             this.panel_calc.SuspendLayout();
             this.panel_sya.SuspendLayout();
             this.SuspendLayout();
@@ -379,6 +379,7 @@
             // 
             // panel_calc
             // 
+            this.panel_calc.BackColor = System.Drawing.Color.White;
             this.panel_calc.CausesValidation = false;
             this.panel_calc.Controls.Add(this.expression);
             this.panel_calc.Controls.Add(this.x);
@@ -414,30 +415,24 @@
             // 
             // panel_sya
             // 
+            this.panel_sya.BackColor = System.Drawing.Color.LavenderBlush;
             this.panel_sya.Controls.Add(this.stackLabel);
             this.panel_sya.Controls.Add(this.postfixLabel);
             this.panel_sya.Controls.Add(this.infixLabel);
             this.panel_sya.Location = new System.Drawing.Point(298, 12);
             this.panel_sya.Name = "panel_sya";
-            this.panel_sya.Size = new System.Drawing.Size(514, 260);
+            this.panel_sya.Size = new System.Drawing.Size(874, 260);
             this.panel_sya.TabIndex = 23;
             // 
-            // panel_exprTree
+            // stackLabel
             // 
-            this.panel_exprTree.Location = new System.Drawing.Point(12, 278);
-            this.panel_exprTree.Name = "panel_exprTree";
-            this.panel_exprTree.Size = new System.Drawing.Size(800, 451);
-            this.panel_exprTree.TabIndex = 24;
-            // 
-            // infixLabel
-            // 
-            this.infixLabel.AutoSize = true;
-            this.infixLabel.CausesValidation = false;
-            this.infixLabel.Location = new System.Drawing.Point(419, 69);
-            this.infixLabel.Name = "infixLabel";
-            this.infixLabel.Size = new System.Drawing.Size(92, 12);
-            this.infixLabel.TabIndex = 26;
-            this.infixLabel.Text = "InfixExpression";
+            this.stackLabel.AutoSize = true;
+            this.stackLabel.CausesValidation = false;
+            this.stackLabel.Location = new System.Drawing.Point(388, 248);
+            this.stackLabel.Name = "stackLabel";
+            this.stackLabel.Size = new System.Drawing.Size(36, 12);
+            this.stackLabel.TabIndex = 28;
+            this.stackLabel.Text = "Stack";
             // 
             // postfixLabel
             // 
@@ -449,21 +444,30 @@
             this.postfixLabel.TabIndex = 27;
             this.postfixLabel.Text = "PostfixExpression";
             // 
-            // stackLabel
+            // infixLabel
             // 
-            this.stackLabel.AutoSize = true;
-            this.stackLabel.CausesValidation = false;
-            this.stackLabel.Location = new System.Drawing.Point(215, 245);
-            this.stackLabel.Name = "stackLabel";
-            this.stackLabel.Size = new System.Drawing.Size(36, 12);
-            this.stackLabel.TabIndex = 28;
-            this.stackLabel.Text = "Stack";
+            this.infixLabel.AutoSize = true;
+            this.infixLabel.CausesValidation = false;
+            this.infixLabel.Location = new System.Drawing.Point(779, 69);
+            this.infixLabel.Name = "infixLabel";
+            this.infixLabel.Size = new System.Drawing.Size(92, 12);
+            this.infixLabel.TabIndex = 26;
+            this.infixLabel.Text = "InfixExpression";
+            // 
+            // panel_exprTree
+            // 
+            this.panel_exprTree.BackColor = System.Drawing.Color.SeaShell;
+            this.panel_exprTree.Location = new System.Drawing.Point(12, 278);
+            this.panel_exprTree.Name = "panel_exprTree";
+            this.panel_exprTree.Size = new System.Drawing.Size(1160, 471);
+            this.panel_exprTree.TabIndex = 24;
             // 
             // CalcForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(824, 741);
+            this.BackColor = System.Drawing.Color.White;
+            this.ClientSize = new System.Drawing.Size(1184, 761);
             this.Controls.Add(this.panel_exprTree);
             this.Controls.Add(this.panel_sya);
             this.Controls.Add(this.panel_calc);
