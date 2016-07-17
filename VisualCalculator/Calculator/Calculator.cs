@@ -221,7 +221,9 @@ namespace VisualCalculator.Calculator
 
         public async void EnterProc()
         {
-            if (!form_.Expr.Any() || CheckValueType(form_.Expr.Last(), ValueType.OPERATOR))
+            if (!form_.Expr.Any()
+                || CheckValueType(form_.Expr.Last(), ValueType.OPERATOR)
+                || CheckValueType(form_.Expr.Last(), ValueType.BRACKET_LEFT))
                 return;
 
             bracketStack_ = 0;
