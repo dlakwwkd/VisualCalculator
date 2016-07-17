@@ -3,32 +3,231 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace VisualCalculator.Calculator
 {
     class Calculator
     {
+        public enum ValueType
+        {
+            NUMERIC,
+            VARIABLE,
+            OPERATOR,
+            DECIMAL,
+            BRACKET_LEFT,
+            BRACKET_RIGHT,
+        }
+
+        //------------------------------------------------------------------------------------
+        // Static Field
+        //------------------------------------------------------------------------------------
+        public static bool CheckValueType(char _value, ValueType _type)
+        {
+            try { return VALUE_KINDS[(int)_type].Contains(_value); }
+            catch { return false; }
+        }
+
+        public static ValueType GetValueType(char _value)
+        {
+            foreach (ValueType type in Enum.GetValues(typeof(ValueType)))
+            {
+                if (CheckValueType(_value, type))
+                    return type;
+            }
+            throw new ArgumentException("invalid argument");
+        }
+
+        private static string[] VALUE_KINDS =
+        {
+            "0123456789",   // NUMERIC
+            "xyz",          // VARIABLE
+            "+-*/",         // OPERATOR
+            ".",            // DECIMAL
+            "(",            // BRACKET_LEFT
+            ")",            // BRACKET_RIGHT
+        };
+
+
+
         //------------------------------------------------------------------------------------
         // Public Field
         //------------------------------------------------------------------------------------
-        public async Task Run(string _expression)
+        public Calculator(CalcForm _form)
+        {
+            form_ = _form;
+            bracketStack_ = 0;
+            decimalUsed_ = false;
+            infixExpr_ = new List<IObject>();
+            sya_ = new ShuntingYardAlgorithm();
+            exprTree_ = new ExpressionTree();
+        }
+
+        public void Init()
+        {
+            form_.Expr = "0";
+            bracketStack_ = 0;
+            decimalUsed_ = false;
+        }
+
+        public void AddValue(char _value)
         {
             try
             {
-                ParseInfixExprFromString(_expression);
+                var type = GetValueType(_value);
+                if (form_.Expr == "0" && type != ValueType.DECIMAL)
+                    form_.Expr = "";
+
+                if (CheckAddAble(type))
+                {
+                    if (type == ValueType.NUMERIC)
+                    {
+                        if (!decimalUsed_
+                            && _value == '0'
+                            && form_.Expr.Any()
+                            && form_.Expr.Last() == '0')
+                            return;
+                    }
+                    else
+                    {
+                        decimalUsed_ = false;
+                    }
+                    switch (type)
+                    {
+                        case ValueType.DECIMAL: decimalUsed_ = true; break;
+                        case ValueType.BRACKET_LEFT: ++bracketStack_; break;
+                        case ValueType.BRACKET_RIGHT: --bracketStack_; break;
+                    }
+                    form_.Expr += _value;
+                }
             }
+            catch (ArgumentException ae)
+            {
+                Console.WriteLine(ae.Message);
+            }
+        }
+
+        public void RemoveValue()
+        {
+            var expr = form_.Expr;
+            if (expr.Any())
+            {
+                try
+                {
+                    switch (GetValueType(expr.Last()))
+                    {
+                        case ValueType.DECIMAL: decimalUsed_ = false; break;
+                        case ValueType.BRACKET_LEFT: --bracketStack_; break;
+                        case ValueType.BRACKET_RIGHT: ++bracketStack_; break;
+                    }
+                    form_.Expr = expr.Substring(0, expr.Length - 1);
+                }
+                catch (ArgumentException ae)
+                {
+                    Console.WriteLine(ae.Message);
+                }
+            }
+        }
+
+        public void NegationProc()
+        {
+            var expr = form_.Expr;
+            if (!expr.Any())
+                return;
+
+            ValueType lastValueType;
+            try { lastValueType = GetValueType(expr.Last()); }
             catch (ArgumentException ae)
             {
                 Console.WriteLine(ae.Message);
                 return;
             }
 
-            await sya_.Run(infixExpression_);
+            int idx = expr.Length - 1;
+            switch (lastValueType)
+            {
+                case ValueType.NUMERIC:
+                case ValueType.VARIABLE:
+                    // 숫자인 경우, 해당 숫자의 앞부분의 위치를 idx에 저장한다.
+                    // 변수인 경우, 변수의 앞부분 또는 변수와 곱셈연산생략으로 붙어있는 숫자의 앞부분을 찾아낸다.
+                    // [예: 32.01 => -32.01 , x => -x , 24y => -24y]
+                    while (--idx > 0)
+                    {
+                        if (CheckValueType(expr[idx], ValueType.NUMERIC)
+                            || CheckValueType(expr[idx], ValueType.DECIMAL))
+                            continue;
+
+                        ++idx;
+                        break;
+                    }
+                    break;
+
+                case ValueType.BRACKET_RIGHT:
+                    // 오른쪽 괄호인 경우, 왼괄호를 찾아 앞부분으로 탐색해나가면서
+                    // 왼괄호 전에 오른괄호가 또 나온다면, 그만큼 왼괄호를 생략해줘야 같은 범위의 왼괄호를 찾을 수 있다.
+                    // [예: x*(y + z) => x*-(y + z) , x*(y/(z + x)) => x*-(y/(z + x))]
+                    int bracketStack = 1;
+                    while (--idx > 0)
+                    {
+                        if (CheckValueType(expr[idx], ValueType.BRACKET_RIGHT))
+                            ++bracketStack;
+
+                        if (CheckValueType(expr[idx], ValueType.BRACKET_LEFT)
+                            && --bracketStack == 0) // 이 연산 순서가 바뀌면 안되는 점에 유의(왼괄호 일치확인-> 스택감산-> 0인지 확인)
+                        {
+                            if (!CheckValueType(expr[idx - 1], ValueType.BRACKET_LEFT)
+                                && !CheckValueType(expr[idx - 1], ValueType.OPERATOR))
+                            {
+                                // 왼괄호 바로 앞이 왼괄호와 연산자가 아닌 경우(즉, 숫자,변수,오른괄호)에는
+                                // 곱셈연산이 생략된 것이므로, 음수화 전에 곱셈연산을 명시해준다.
+                                // [예: 3(x + y) => 3*-(x + y) , x(y + z) => x*-(y +z) , (x + y)(y + z) => (x + y)*-(y + z)]
+                                expr = expr.Insert(idx, "*");
+                                ++idx;
+                            }
+                            break;
+                        }
+                    }
+                    break;
+
+                default:
+                    // 나머지는 소수점,왼괄호의 경우 또는 식에 값이 하나도 없는 경우인데
+                    // 이 때는 음수화연산이 실행되면 안 되므로 함수를 종료한다.
+                    return;
+            }
+
+            // 식에 값이 하나인 경우였다면, idx가 -1이 되는데, 이를 0으로 바꿔줘야 밑의 연산이 문제없이 된다.
+            if (idx < 0)
+                idx = 0;
+
+            // 음수화부호가 이미 있다면 새로 추가하지 않고 제거한다.
+            if (idx == 0 && expr[idx] == '-')
+            {
+                // [예: -x => x]
+                form_.Expr = expr.Remove(idx, 1);
+            }
+            else if (idx > 1 && expr[idx - 1] == '-'
+                && (CheckValueType(expr[idx - 2], ValueType.OPERATOR)
+                    || CheckValueType(expr[idx - 2], ValueType.BRACKET_LEFT)))
+            {
+                // [예: x*-y => x*y , (-x... => (x...]
+                form_.Expr = expr.Remove(idx - 1, 1);
+            }
+            else
+            {
+                // 나머지 경우는 음수화부호를 추가해줘야 하는 경우이다.
+                form_.Expr = expr.Insert(idx, "-");
+            }
         }
 
-        public void SetStringFromResult(double _result)
+        public async void EnterProc()
         {
+            if (!form_.Expr.Any() || CheckValueType(form_.Expr.Last(), ValueType.OPERATOR))
+                return;
 
+            bracketStack_ = 0;
+            form_.InputEnable = false;
+            await Calculate();
+            form_.InputEnable = true;
         }
 
 
@@ -36,92 +235,88 @@ namespace VisualCalculator.Calculator
         //------------------------------------------------------------------------------------
         // Private Field
         //------------------------------------------------------------------------------------
-        private void ParseInfixExprFromString(string _expression)
+        private bool CheckAddAble(ValueType _type)
         {
-            // 앞에서부터 차례대로 파싱한다.
-            for (int i = 0; i < _expression.Length; ++i)
+            var expr = form_.Expr;
+            if (expr.Any())
+                return CheckAddAble(_type, GetValueType(expr.Last()));
+
+            switch (_type)
             {
-                switch (CalcForm.GetValueType(_expression[i]))
-                {
-                    case CalcForm.ValueType.NUMERIC:    i = ParseNumeric(_expression, i);   break;
-                    case CalcForm.ValueType.VARIABLE:   ParseVariable(_expression, i);      break;
-                    case CalcForm.ValueType.OPERATOR:   ParseOperator(_expression, i);      break;
-                    default:                            ParseBracket(_expression, i);       break;
-                        // 나머지 경우는 왼/오른 괄호의 경우만 남는다.(소수점은 숫자파싱에서 걸러진다.)
-                }
+                case ValueType.OPERATOR:
+                case ValueType.DECIMAL:
+                    return false;
+
+                default:
+                    return true;
             }
         }
 
-        private int ParseNumeric(string _expr, int _index)
+        private bool CheckAddAble(ValueType _input, ValueType _lastValue)
         {
-            // 소수점을 포함해 그 숫자가 끝날 때까지를 읽어서 파싱한다.
-            for (int j = _index + 1; j < _expr.Length; ++j)
+            switch (_input)
             {
-                if (CalcForm.CheckValueType(_expr[j], CalcForm.ValueType.NUMERIC)
-                    || CalcForm.CheckValueType(_expr[j], CalcForm.ValueType.DECIMAL))
-                    continue;
+                case ValueType.NUMERIC:
+                    return _lastValue == ValueType.VARIABLE
+                        || _lastValue == ValueType.BRACKET_RIGHT
+                        ? false : true;
 
-                var value = double.Parse(_expr.Substring(_index, j - _index));
-                infixExpression_.Add(new Operand.Numeric(value));
-                return j - 1;
-            }
-            return _index;
-        }
+                case ValueType.OPERATOR:
+                    return _lastValue == ValueType.OPERATOR
+                        || _lastValue == ValueType.DECIMAL
+                        || _lastValue == ValueType.BRACKET_LEFT
+                        ? false : true;
 
-        private void ParseVariable(string _expr, int _index)
-        {
-            // 변수의 바로 앞에 숫자가 있는 경우 곱셈연산자가 생략된 것이므로,
-            // 곱셈 연산자를 추가해준 후 변수를 추가한다. (예: 3x + 2y => 3*x + 2*y)
-            if (_index > 0 && CalcForm.CheckValueType(_expr[_index - 1], CalcForm.ValueType.NUMERIC))
-            {
-                infixExpression_.Add(new Operator.Binary.Mult());
-            }
-            infixExpression_.Add(new Operand.Variable(_expr[_index]));
-        }
+                case ValueType.VARIABLE:
+                    return _lastValue == ValueType.VARIABLE
+                        || _lastValue == ValueType.DECIMAL
+                        || _lastValue == ValueType.BRACKET_RIGHT
+                        ? false : true;
 
-        private void ParseOperator(string _expr, int _index)
-        {
-            // '-'의 경우 뺄셈과 음수화의 두 가지 경우가 있다.
-            switch (_expr[_index])
-            {
-                case '+': infixExpression_.Add(new Operator.Binary.Plus()); break;
-                case '*': infixExpression_.Add(new Operator.Binary.Mult()); break;
-                case '/': infixExpression_.Add(new Operator.Binary.Div()); break;
-                case '-':
-                    if (_index == 0      // 가장 앞인 경우(예: '-'x + y)
-                        || _index > 0    // 바로 앞이 또 연산자이거나 왼쪽괄호인 경우(예: x'*-'y , x*'(-'y + z))
-                        && (CalcForm.CheckValueType(_expr[_index - 1], CalcForm.ValueType.OPERATOR)
-                            || CalcForm.CheckValueType(_expr[_index - 1], CalcForm.ValueType.OPERATOR)))
-                        infixExpression_.Add(new Operator.Unary.Negation());
-                    else
-                        infixExpression_.Add(new Operator.Binary.Minus());
-                    break;
+                case ValueType.DECIMAL:
+                    return decimalUsed_
+                        || _lastValue != ValueType.NUMERIC
+                        ? false : true;
+
+                case ValueType.BRACKET_LEFT:
+                    return _lastValue == ValueType.DECIMAL
+                        ? false : true;
+
+                case ValueType.BRACKET_RIGHT:
+                    return bracketStack_ < 1
+                        || _lastValue == ValueType.DECIMAL
+                        || _lastValue == ValueType.BRACKET_LEFT
+                        ? false : true;
+
+                default:
+                    return false;
             }
         }
 
-        private void ParseBracket(string _expr, int _index)
+        private async Task Calculate()
         {
-            switch (_expr[_index])
+            infixExpr_.Clear();
+            try
             {
-                case '(':
-                    if (_index > 0   // 바로 앞이 숫자/변수인 경우 곱셈연산이 생략된 것이므로 추가해준다.
-                        && (CalcForm.CheckValueType(_expr[_index - 1], CalcForm.ValueType.NUMERIC)
-                            || CalcForm.CheckValueType(_expr[_index - 1], CalcForm.ValueType.VARIABLE)))
-                    {
-                        infixExpression_.Add(new Operator.Binary.Mult());
-                    }
-                    infixExpression_.Add(new Operator.BracketL());
-                    break;
-                case ')':
-                    infixExpression_.Add(new Operator.BracketR());
-                    break;
+                Parser.StringToInfixExpr(form_.Expr, infixExpr_);
             }
+            catch (ArgumentException ae)
+            {
+                Console.WriteLine(ae.Message);
+                return;
+            }
+
+            await sya_.Run(form_.SyaPanel, infixExpr_);
         }
 
 
 
-        private List<object>            infixExpression_    = new List<object>();
-        private ExpressionTree          exprTree_           = new ExpressionTree();
-        private ShuntingYardAlgorithm   sya_                = new ShuntingYardAlgorithm();
+        private CalcForm                form_;
+        private int                     bracketStack_;
+        private bool                    decimalUsed_;
+
+        private List<IObject>           infixExpr_;
+        private ShuntingYardAlgorithm   sya_;
+        private ExpressionTree          exprTree_;
     }
 }

@@ -8,6 +8,8 @@ namespace VisualCalculator.Operator.Binary
 {
     class Plus : IBinaryOper
     {
+        public string   Name { get; } = "+";
+
         public bool     IsLeftAssociative() { return true; }
         public int      GetPrecedence() { return 2; }
 

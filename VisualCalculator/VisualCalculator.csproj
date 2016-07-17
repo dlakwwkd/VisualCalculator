@@ -54,7 +54,9 @@
     </Compile>
     <Compile Include="Calculator\Calculator.cs" />
     <Compile Include="Calculator\ExpressionTree.cs" />
+    <Compile Include="Calculator\Parser.cs" />
     <Compile Include="Calculator\ShuntingYardAlgorithm.cs" />
+    <Compile Include="IObject.cs" />
     <Compile Include="Operand\Numeric.cs" />
     <Compile Include="Operand\Variable.cs" />
     <Compile Include="Operator\Binary\IBinaryOper.cs" />

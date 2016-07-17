@@ -13,6 +13,7 @@ namespace VisualCalculator.Operand
             value_ = _value;
         }
 
+        public string Name { get { return value_.ToString(); } }
 
         private char value_;
     }

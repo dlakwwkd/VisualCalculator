@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace VisualCalculator.Operand
 {
-    interface IOperand
+    interface IOperand : IObject
     {
     }
 }

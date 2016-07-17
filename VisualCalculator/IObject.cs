@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace VisualCalculator.Operator
+namespace VisualCalculator
 {
-    interface IOperator : IObject
+    interface IObject
     {
+        string Name { get; }
     }
 }
