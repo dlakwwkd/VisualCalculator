@@ -17,7 +17,7 @@ namespace VisualCalculator.Calculator
         //------------------------------------------------------------------------------------
         // Public Field
         //------------------------------------------------------------------------------------
-        public async Task Run(Panel _panel, List<IObject> _infixExpr)
+        public async Task<List<IObject>> Run(Panel _panel, List<IObject> _infixExpr)
         {
             Init(_panel);
             infixExpr_ = _infixExpr;
@@ -27,7 +27,7 @@ namespace VisualCalculator.Calculator
             await InputSetting();
             await Task.Delay(500);
 
-            foreach (var obj in _infixExpr)
+            foreach (var obj in infixExpr_)
             {
                 var item = inputPanel_.Controls[0];
                 inputPanel_.Controls.Remove(item);
@@ -101,6 +101,8 @@ namespace VisualCalculator.Calculator
             _panel.Controls.Remove(inputPanel_);
             _panel.Controls.Remove(infixPanel_);
             _panel.Controls.Remove(stackPanel_);
+
+            return postfixExpr_;
         }
 
 

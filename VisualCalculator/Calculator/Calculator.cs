@@ -222,14 +222,17 @@ namespace VisualCalculator.Calculator
         public async void EnterProc()
         {
             if (!form_.Expr.Any()
+                || bracketStack_ > 0
                 || CheckValueType(form_.Expr.Last(), ValueType.OPERATOR)
+                || CheckValueType(form_.Expr.Last(), ValueType.DECIMAL)
                 || CheckValueType(form_.Expr.Last(), ValueType.BRACKET_LEFT))
                 return;
 
-            bracketStack_ = 0;
             form_.InputEnable = false;
             await Calculate();
             form_.InputEnable = true;
+            bracketStack_ = 0;
+            decimalUsed_ = false;
         }
 
 
@@ -308,7 +311,9 @@ namespace VisualCalculator.Calculator
                 return;
             }
 
-            await sya_.Run(form_.SyaPanel, infixExpr_);
+            var postfixExpr = await sya_.Run(form_.SyaPanel, infixExpr_);
+
+            await exprTree_.Run(form_.TreePanel, postfixExpr);
         }
 
 
