@@ -110,6 +110,11 @@ namespace VisualCalculator.Calculator
         //------------------------------------------------------------------------------------
         private void Init(Panel _panel)
         {
+            _panel.Controls.Remove(inputPanel_);
+            _panel.Controls.Remove(infixPanel_);
+            _panel.Controls.Remove(postfixPanel_);
+            _panel.Controls.Remove(stackPanel_);
+
             inputPanel_.Controls.Clear();
             inputPanel_.FlowDirection = FlowDirection.LeftToRight;
             inputPanel_.Anchor = AnchorStyles.Top | AnchorStyles.Right;
@@ -146,7 +151,6 @@ namespace VisualCalculator.Calculator
             stackPanel_.AutoSize = true;
             stackPanel_.BackColor = Color.Brown;
 
-            _panel.Controls.Clear();
             _panel.Controls.Add(inputPanel_);
             _panel.Controls.Add(infixPanel_);
             _panel.Controls.Add(postfixPanel_);
@@ -179,14 +183,14 @@ namespace VisualCalculator.Calculator
                 goalPos.X += postfixPanel_.Width;
 
                 int spot = goalPos.X + (item.Location.X - goalPos.X) / 2;
-                var speed = 0.001f;
+                var speed = 0.0f;
                 while (item.Location.X > goalPos.X)
                 {
                     var curPos = item.Location;
                     if (curPos.X > spot)
-                        speed *= 1.5f;
+                        speed += 0.3f;
                     else
-                        speed *= 0.75f;
+                        speed -= 0.3f;
                     item.Location = new Point(curPos.X - (int)(speed + 3), curPos.Y);
                     await Task.Delay(10);
                 }
