@@ -47,32 +47,39 @@ namespace VisualCalculator.Calculator
             // 따라서 여기에 들어왔다는건 요소가 반드시 하나 이상 있다는 의미이다.
             var node = CreateNode(_postfixExpr.Pop());
 
-            await Task.Delay(300);
+            await Task.Delay(500);
 
             gabX_ /= 2;
             if (node.Data is IOperator)
             {
                 if (node.Data is IBinaryOper)
                 {
-                    createPos_.X += (int)gabX_;
                     createPos_.Y += gabY_;
+                    createPos_.X += (int)gabX_;
+
                     node.Right = await BuildTree(_postfixExpr);
+                    await DrawLine(node, node.Right);
+
                     createPos_.X -= (int)(gabX_ * 2);
+
                     node.Left = await BuildTree(_postfixExpr);
+                    await DrawLine(node, node.Left);
+
                     createPos_.X += (int)gabX_;
                     createPos_.Y -= gabY_;
                 }
                 else
                 {
                     createPos_.Y += gabY_;
+
                     node.Right = await BuildTree(_postfixExpr);
+                    await DrawLine(node, node.Right);
+
                     createPos_.Y -= gabY_;
                 }
             }
             gabX_ *= 2;
 
-            DrawLine(node, node.Left);
-            DrawLine(node, node.Right);
 
             return node;
         }
@@ -90,7 +97,7 @@ namespace VisualCalculator.Calculator
             return new Node() { Data = _data, Item = label };
         }
 
-        private void DrawLine(Node _parent, Node _child)
+        private async Task DrawLine(Node _parent, Node _child)
         {
             if (_parent == null || _child == null)
                 return;
@@ -104,6 +111,7 @@ namespace VisualCalculator.Calculator
             sizeC.Width /= 2;
             sizeC.Height /= 2;
             g.DrawLine(p, _parent.Item.Location + sizeP, _child.Item.Location + sizeC);
+            await Task.Delay(300);
         }
 
         private async Task Evaluate()
