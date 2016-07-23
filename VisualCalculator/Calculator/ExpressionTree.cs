@@ -23,17 +23,21 @@ namespace VisualCalculator.Calculator
         //------------------------------------------------------------------------------------
         // Public Field
         //------------------------------------------------------------------------------------
-        public async Task Run(Panel _panel, List<IObject> _postfixExpr)
+        public async Task BuildTree(Panel _panel, List<IObject> _postfixExpr)
         {
             _panel.Controls.Clear();
             _panel.Invalidate();
+
             panel_ = _panel;
             createPos_ = new Point(panel_.Width / 2, 0);
             gabX_ = panel_.Width / 2;
             gabY_ = 60;
             rootNode_ = await BuildTree(new Stack<IObject>(_postfixExpr));
-            await Task.Delay(200);
-            await Evaluate();
+        }
+
+        public async Task Evaluate(Panel _panel)
+        {
+            await Evaluate(rootNode_);
         }
 
 
@@ -114,9 +118,9 @@ namespace VisualCalculator.Calculator
             await Task.Delay(300);
         }
 
-        private async Task Evaluate()
+        private async Task Evaluate(Node _node)
         {
-            await Task.Delay(10);
+            await Task.Delay(3000);
         }
 
 

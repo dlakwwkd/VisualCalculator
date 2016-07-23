@@ -26,8 +26,10 @@ namespace VisualCalculator
             pen_ = new Pen(Color.Black);
         }
 
+        public Panel    InputPanel { get { return panel_input; } }
         public Panel    SyaPanel { get { return panel_sya; } }
         public Panel    TreePanel { get { return panel_exprTree; } }
+        public Panel    ResultPanel { get { return panel_result; } }
         public bool     InputEnable { get; set; } = true;
         public string   Expr
         {
@@ -109,7 +111,10 @@ namespace VisualCalculator
         private void ce_Click(object sender, EventArgs e)       { if (InputEnable) calculator_.Init(); }
         private void c_Click(object sender, EventArgs e)        { if (InputEnable) calculator_.Init(); }
         private void enter_Click(object sender, EventArgs e)    { if (InputEnable) calculator_.EnterProc(); }
-        
+
+        private void button_calc_Click(object sender, EventArgs e)  { calculator_.CalcProc(); }
+        private void button_reset_Click(object sender, EventArgs e) { calculator_.ResetProc(); }
+
 
         // - Draw Handler
         //------------------------------------------------------------------------------------
@@ -143,5 +148,6 @@ namespace VisualCalculator
         //------------------------------------------------------------------------------------
         private Calculator.Calculator   calculator_;
         private Pen                     pen_;
+
     }
 }

@@ -58,7 +58,6 @@ namespace VisualCalculator.Calculator
             form_ = _form;
             bracketStack_ = 0;
             decimalUsed_ = false;
-            infixExpr_ = new List<IObject>();
             sya_ = new ShuntingYardAlgorithm();
             exprTree_ = new ExpressionTree();
         }
@@ -219,7 +218,7 @@ namespace VisualCalculator.Calculator
             }
         }
 
-        public async void EnterProc()
+        public void EnterProc()
         {
             if (!form_.Expr.Any()
                 || bracketStack_ > 0
@@ -228,13 +227,25 @@ namespace VisualCalculator.Calculator
                 || CheckValueType(form_.Expr.Last(), ValueType.BRACKET_LEFT))
                 return;
 
-            form_.InputEnable = false;
-            await Calculate();
-            form_.InputEnable = true;
             bracketStack_ = 0;
             decimalUsed_ = false;
+            Run();
         }
 
+        public async void CalcProc()
+        {
+            form_.ResultPanel.Enabled = false;
+            await exprTree_.Evaluate(form_.ResultPanel);
+            form_.ResultPanel.Enabled = true;
+        }
+
+        public void ResetProc()
+        {
+            form_.TreePanel.Enabled = false;
+            form_.ResultPanel.Enabled = false;
+            form_.InputEnable = true;
+            form_.InputPanel.Select();
+        }
 
 
         //------------------------------------------------------------------------------------
@@ -298,22 +309,29 @@ namespace VisualCalculator.Calculator
             }
         }
 
-        private async Task Calculate()
+        private async void Run()
         {
-            infixExpr_.Clear();
+            List<IObject> infixExpr = new List<IObject>();
             try
             {
-                Parser.StringToInfixExpr(form_.Expr, infixExpr_);
+                Parser.StringToInfixExpr(form_.Expr, infixExpr);
             }
             catch (ArgumentException ae)
             {
                 Console.WriteLine(ae.Message);
                 return;
             }
+            form_.InputEnable = false;
+            form_.SyaPanel.Enabled = true;
 
-            var postfixExpr = await sya_.Run(form_.SyaPanel, infixExpr_);
+            var postfixExpr = await sya_.Run(form_.SyaPanel, infixExpr);
 
-            await exprTree_.Run(form_.TreePanel, postfixExpr);
+            form_.SyaPanel.Enabled = false;
+            form_.TreePanel.Enabled = true;
+
+            await exprTree_.BuildTree(form_.TreePanel, postfixExpr);
+
+            form_.ResultPanel.Enabled = true;
         }
 
 
@@ -322,7 +340,6 @@ namespace VisualCalculator.Calculator
         private int                     bracketStack_;
         private bool                    decimalUsed_;
 
-        private List<IObject>           infixExpr_;
         private ShuntingYardAlgorithm   sya_;
         private ExpressionTree          exprTree_;
     }

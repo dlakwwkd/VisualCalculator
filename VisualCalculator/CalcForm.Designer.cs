@@ -54,7 +54,7 @@
             this.bracketL = new System.Windows.Forms.Button();
             this.y = new System.Windows.Forms.Button();
             this.z = new System.Windows.Forms.Button();
-            this.panel_calc = new System.Windows.Forms.FlowLayoutPanel();
+            this.panel_input = new System.Windows.Forms.FlowLayoutPanel();
             this.panel_sya = new System.Windows.Forms.Panel();
             this.stackLabel = new System.Windows.Forms.Label();
             this.postfixLabel = new System.Windows.Forms.Label();
@@ -67,11 +67,11 @@
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.textBox3 = new System.Windows.Forms.TextBox();
-            this.button_calc = new System.Windows.Forms.Button();
-            this.label_result = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
+            this.label_result = new System.Windows.Forms.Label();
+            this.button_calc = new System.Windows.Forms.Button();
             this.button_reset = new System.Windows.Forms.Button();
-            this.panel_calc.SuspendLayout();
+            this.panel_input.SuspendLayout();
             this.panel_sya.SuspendLayout();
             this.panel_result.SuspendLayout();
             this.SuspendLayout();
@@ -415,42 +415,42 @@
             this.z.UseVisualStyleBackColor = true;
             this.z.Click += new System.EventHandler(this.z_Click);
             // 
-            // panel_calc
+            // panel_input
             // 
-            this.panel_calc.BackColor = System.Drawing.Color.White;
-            this.panel_calc.CausesValidation = false;
-            this.panel_calc.Controls.Add(this.expression);
-            this.panel_calc.Controls.Add(this.x);
-            this.panel_calc.Controls.Add(this.ce);
-            this.panel_calc.Controls.Add(this.c);
-            this.panel_calc.Controls.Add(this.erase);
-            this.panel_calc.Controls.Add(this.div);
-            this.panel_calc.Controls.Add(this.y);
-            this.panel_calc.Controls.Add(this.num7);
-            this.panel_calc.Controls.Add(this.num8);
-            this.panel_calc.Controls.Add(this.num9);
-            this.panel_calc.Controls.Add(this.mult);
-            this.panel_calc.Controls.Add(this.z);
-            this.panel_calc.Controls.Add(this.num4);
-            this.panel_calc.Controls.Add(this.num5);
-            this.panel_calc.Controls.Add(this.num6);
-            this.panel_calc.Controls.Add(this.minus);
-            this.panel_calc.Controls.Add(this.bracketL);
-            this.panel_calc.Controls.Add(this.num1);
-            this.panel_calc.Controls.Add(this.num2);
-            this.panel_calc.Controls.Add(this.num3);
-            this.panel_calc.Controls.Add(this.plus);
-            this.panel_calc.Controls.Add(this.bracketR);
-            this.panel_calc.Controls.Add(this.negation);
-            this.panel_calc.Controls.Add(this.num0);
-            this.panel_calc.Controls.Add(this.dot);
-            this.panel_calc.Controls.Add(this.enter);
-            this.panel_calc.Location = new System.Drawing.Point(12, 12);
-            this.panel_calc.Margin = new System.Windows.Forms.Padding(0);
-            this.panel_calc.Name = "panel_calc";
-            this.panel_calc.Padding = new System.Windows.Forms.Padding(10);
-            this.panel_calc.Size = new System.Drawing.Size(280, 260);
-            this.panel_calc.TabIndex = 22;
+            this.panel_input.BackColor = System.Drawing.Color.White;
+            this.panel_input.CausesValidation = false;
+            this.panel_input.Controls.Add(this.expression);
+            this.panel_input.Controls.Add(this.x);
+            this.panel_input.Controls.Add(this.ce);
+            this.panel_input.Controls.Add(this.c);
+            this.panel_input.Controls.Add(this.erase);
+            this.panel_input.Controls.Add(this.div);
+            this.panel_input.Controls.Add(this.y);
+            this.panel_input.Controls.Add(this.num7);
+            this.panel_input.Controls.Add(this.num8);
+            this.panel_input.Controls.Add(this.num9);
+            this.panel_input.Controls.Add(this.mult);
+            this.panel_input.Controls.Add(this.z);
+            this.panel_input.Controls.Add(this.num4);
+            this.panel_input.Controls.Add(this.num5);
+            this.panel_input.Controls.Add(this.num6);
+            this.panel_input.Controls.Add(this.minus);
+            this.panel_input.Controls.Add(this.bracketL);
+            this.panel_input.Controls.Add(this.num1);
+            this.panel_input.Controls.Add(this.num2);
+            this.panel_input.Controls.Add(this.num3);
+            this.panel_input.Controls.Add(this.plus);
+            this.panel_input.Controls.Add(this.bracketR);
+            this.panel_input.Controls.Add(this.negation);
+            this.panel_input.Controls.Add(this.num0);
+            this.panel_input.Controls.Add(this.dot);
+            this.panel_input.Controls.Add(this.enter);
+            this.panel_input.Location = new System.Drawing.Point(12, 12);
+            this.panel_input.Margin = new System.Windows.Forms.Padding(0);
+            this.panel_input.Name = "panel_input";
+            this.panel_input.Padding = new System.Windows.Forms.Padding(10);
+            this.panel_input.Size = new System.Drawing.Size(280, 260);
+            this.panel_input.TabIndex = 22;
             // 
             // panel_sya
             // 
@@ -588,16 +588,18 @@
             this.textBox3.Size = new System.Drawing.Size(100, 24);
             this.textBox3.TabIndex = 5;
             // 
-            // button_calc
+            // label5
             // 
-            this.button_calc.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.button_calc.Font = new System.Drawing.Font("굴림", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.button_calc.Location = new System.Drawing.Point(1024, 8);
-            this.button_calc.Name = "button_calc";
-            this.button_calc.Size = new System.Drawing.Size(90, 25);
-            this.button_calc.TabIndex = 6;
-            this.button_calc.Text = "Calculate";
-            this.button_calc.UseVisualStyleBackColor = true;
+            this.label5.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("굴림", 13F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.label5.ForeColor = System.Drawing.Color.White;
+            this.label5.Location = new System.Drawing.Point(412, 11);
+            this.label5.Margin = new System.Windows.Forms.Padding(10, 0, 3, 0);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(63, 18);
+            this.label5.TabIndex = 8;
+            this.label5.Text = "Result";
             // 
             // label_result
             // 
@@ -612,18 +614,17 @@
             this.label_result.Text = "0";
             this.label_result.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // label5
+            // button_calc
             // 
-            this.label5.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("굴림", 13F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.label5.ForeColor = System.Drawing.Color.White;
-            this.label5.Location = new System.Drawing.Point(412, 11);
-            this.label5.Margin = new System.Windows.Forms.Padding(10, 0, 3, 0);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(63, 18);
-            this.label5.TabIndex = 8;
-            this.label5.Text = "Result";
+            this.button_calc.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.button_calc.Font = new System.Drawing.Font("굴림", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.button_calc.Location = new System.Drawing.Point(1024, 8);
+            this.button_calc.Name = "button_calc";
+            this.button_calc.Size = new System.Drawing.Size(90, 25);
+            this.button_calc.TabIndex = 6;
+            this.button_calc.Text = "Calculate";
+            this.button_calc.UseVisualStyleBackColor = true;
+            this.button_calc.Click += new System.EventHandler(this.button_calc_Click);
             // 
             // button_reset
             // 
@@ -637,6 +638,7 @@
             this.button_reset.TabIndex = 9;
             this.button_reset.Text = "R";
             this.button_reset.UseVisualStyleBackColor = false;
+            this.button_reset.Click += new System.EventHandler(this.button_reset_Click);
             // 
             // CalcForm
             // 
@@ -647,11 +649,11 @@
             this.Controls.Add(this.panel_result);
             this.Controls.Add(this.panel_exprTree);
             this.Controls.Add(this.panel_sya);
-            this.Controls.Add(this.panel_calc);
+            this.Controls.Add(this.panel_input);
             this.KeyPreview = true;
             this.Name = "CalcForm";
             this.Text = "Calculator";
-            this.panel_calc.ResumeLayout(false);
+            this.panel_input.ResumeLayout(false);
             this.panel_sya.ResumeLayout(false);
             this.panel_sya.PerformLayout();
             this.panel_result.ResumeLayout(false);
@@ -688,7 +690,7 @@
         private System.Windows.Forms.Button bracketL;
         private System.Windows.Forms.Button y;
         private System.Windows.Forms.Button z;
-        private System.Windows.Forms.FlowLayoutPanel panel_calc;
+        private System.Windows.Forms.FlowLayoutPanel panel_input;
         private System.Windows.Forms.Panel panel_sya;
         private System.Windows.Forms.Panel panel_exprTree;
         private System.Windows.Forms.Label postfixLabel;
