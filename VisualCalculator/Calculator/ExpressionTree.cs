@@ -5,8 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using VisualCalculator.Operand;
 using VisualCalculator.Operator;
 using VisualCalculator.Operator.Binary;
+using VisualCalculator.Operator.Unary;
 
 namespace VisualCalculator.Calculator
 {
@@ -35,9 +37,14 @@ namespace VisualCalculator.Calculator
             rootNode_ = await BuildTree(new Stack<IObject>(_postfixExpr));
         }
 
-        public async Task Evaluate(Panel _panel)
+        public async Task<double> Evaluate()
         {
-            await Evaluate(rootNode_);
+            return await Evaluate(rootNode_);
+        }
+
+        public async Task SetVariable(char _name, double _value)
+        {
+            await SetVariable(_name, _value, rootNode_);
         }
 
 
@@ -118,9 +125,48 @@ namespace VisualCalculator.Calculator
             await Task.Delay(300);
         }
 
-        private async Task Evaluate(Node _node)
+        private async Task<double> Evaluate(Node _node)
         {
-            await Task.Delay(3000);
+            if (_node == null)
+                return 0.0;
+
+            if (_node.Data is IOperator)
+            {
+                var oper = _node.Data as IOperator;
+                if (oper is IBinaryOper)
+                {
+                    double leftResult = await Evaluate(_node.Left);
+                    double rightResult = await Evaluate(_node.Right);
+                    return (oper as IBinaryOper).Calc(leftResult, rightResult);
+                }
+                else
+                {
+                    double result = await Evaluate(_node.Right);
+                    return (oper as IUnaryOper).Calc(result);
+                }
+            }
+            else
+            {
+                return (_node.Data as IOperand).Value;
+            }
+        }
+
+        private async Task SetVariable(char _name, double _value, Node _node)
+        {
+            if (_node == null)
+                return;
+
+            if (_node.Data is Variable)
+            {
+                var var = _node.Data as Variable;
+                if (var.Name == _name.ToString())
+                {
+                    var.Value = _value;
+                    _node.Item.Text = _name + ": " + _value;
+                }
+            }
+            await SetVariable(_name, _value, _node.Left);
+            await SetVariable(_name, _value, _node.Right);
         }
 
 

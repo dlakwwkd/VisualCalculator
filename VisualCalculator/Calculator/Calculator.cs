@@ -234,8 +234,21 @@ namespace VisualCalculator.Calculator
 
         public async void CalcProc()
         {
+            double x, y, z;
+            if (form_.GetX(out x))
+            {
+                await exprTree_.SetVariable('x', x);
+            }
+            if (form_.GetY(out y))
+            {
+                await exprTree_.SetVariable('y', y);
+            }
+            if (form_.GetZ(out z))
+            {
+                await exprTree_.SetVariable('z', z);
+            }
             form_.ResultPanel.Enabled = false;
-            await exprTree_.Evaluate(form_.ResultPanel);
+            form_.SetResult(await exprTree_.Evaluate());
             form_.ResultPanel.Enabled = true;
         }
 

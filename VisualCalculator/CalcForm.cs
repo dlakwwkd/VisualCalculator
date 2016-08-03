@@ -37,6 +37,13 @@ namespace VisualCalculator
             set { expression.Text = value; }
         }
 
+        public bool     GetX(out double _x) { return double.TryParse(inputX.Text, out _x); }
+        public bool     GetY(out double _y) { return double.TryParse(inputY.Text, out _y); }
+        public bool     GetZ(out double _z) { return double.TryParse(inputZ.Text, out _z); }
+        public void     SetResult(double _result)
+        {
+            label_result.Text = _result.ToString();
+        }
 
 
         //------------------------------------------------------------------------------------
@@ -112,8 +119,20 @@ namespace VisualCalculator
         private void c_Click(object sender, EventArgs e)        { if (InputEnable) calculator_.Init(); }
         private void enter_Click(object sender, EventArgs e)    { if (InputEnable) calculator_.EnterProc(); }
 
-        private void button_calc_Click(object sender, EventArgs e)  { calculator_.CalcProc(); }
-        private void button_reset_Click(object sender, EventArgs e) { calculator_.ResetProc(); }
+        private void button_calc_Click(object sender, EventArgs e)
+        {
+            calculator_.CalcProc();
+        }
+        private void button_reset_Click(object sender, EventArgs e)
+        {
+            calculator_.ResetProc();
+            inputX.Text = "";
+            inputY.Text = "";
+            inputZ.Text = "";
+            label_result.Text = "";
+            panel_exprTree.Controls.Clear();
+            panel_exprTree.Invalidate();
+        }
 
 
         // - Draw Handler

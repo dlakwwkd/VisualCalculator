@@ -62,11 +62,11 @@
             this.panel_exprTree = new System.Windows.Forms.Panel();
             this.panel_result = new System.Windows.Forms.FlowLayoutPanel();
             this.label1 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.inputX = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.inputY = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.inputZ = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.label_result = new System.Windows.Forms.Label();
             this.button_calc = new System.Windows.Forms.Button();
@@ -508,11 +508,11 @@
             this.panel_result.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.panel_result.BackColor = System.Drawing.Color.Black;
             this.panel_result.Controls.Add(this.label1);
-            this.panel_result.Controls.Add(this.textBox1);
+            this.panel_result.Controls.Add(this.inputX);
             this.panel_result.Controls.Add(this.label2);
-            this.panel_result.Controls.Add(this.textBox2);
+            this.panel_result.Controls.Add(this.inputY);
             this.panel_result.Controls.Add(this.label3);
-            this.panel_result.Controls.Add(this.textBox3);
+            this.panel_result.Controls.Add(this.inputZ);
             this.panel_result.Controls.Add(this.label5);
             this.panel_result.Controls.Add(this.label_result);
             this.panel_result.Controls.Add(this.button_calc);
@@ -537,14 +537,14 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "x";
             // 
-            // textBox1
+            // inputX
             // 
-            this.textBox1.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.textBox1.Font = new System.Drawing.Font("굴림", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.textBox1.Location = new System.Drawing.Point(35, 8);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 24);
-            this.textBox1.TabIndex = 1;
+            this.inputX.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.inputX.Font = new System.Drawing.Font("굴림", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.inputX.Location = new System.Drawing.Point(35, 8);
+            this.inputX.Name = "inputX";
+            this.inputX.Size = new System.Drawing.Size(100, 24);
+            this.inputX.TabIndex = 1;
             // 
             // label2
             // 
@@ -558,14 +558,14 @@
             this.label2.TabIndex = 2;
             this.label2.Text = "y";
             // 
-            // textBox2
+            // inputY
             // 
-            this.textBox2.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.textBox2.Font = new System.Drawing.Font("굴림", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.textBox2.Location = new System.Drawing.Point(167, 8);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(100, 24);
-            this.textBox2.TabIndex = 3;
+            this.inputY.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.inputY.Font = new System.Drawing.Font("굴림", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.inputY.Location = new System.Drawing.Point(167, 8);
+            this.inputY.Name = "inputY";
+            this.inputY.Size = new System.Drawing.Size(100, 24);
+            this.inputY.TabIndex = 3;
             // 
             // label3
             // 
@@ -579,14 +579,14 @@
             this.label3.TabIndex = 4;
             this.label3.Text = "z";
             // 
-            // textBox3
+            // inputZ
             // 
-            this.textBox3.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.textBox3.Font = new System.Drawing.Font("굴림", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.textBox3.Location = new System.Drawing.Point(299, 8);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(100, 24);
-            this.textBox3.TabIndex = 5;
+            this.inputZ.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.inputZ.Font = new System.Drawing.Font("굴림", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.inputZ.Location = new System.Drawing.Point(299, 8);
+            this.inputZ.Name = "inputZ";
+            this.inputZ.Size = new System.Drawing.Size(100, 24);
+            this.inputZ.TabIndex = 5;
             // 
             // label5
             // 
@@ -698,11 +698,11 @@
         private System.Windows.Forms.Label stackLabel;
         private System.Windows.Forms.FlowLayoutPanel panel_result;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox inputX;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox inputY;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.TextBox inputZ;
         private System.Windows.Forms.Button button_calc;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label_result;

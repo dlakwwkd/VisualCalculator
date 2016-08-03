@@ -8,13 +8,20 @@ namespace VisualCalculator.Operand
 {
     class Variable : IOperand
     {
-        public Variable(char _value)
+        public Variable(char _name)
         {
-            value_ = _value;
+            name_ = _name;
+            value_ = 0.0;
         }
 
-        public string Name { get { return value_.ToString(); } }
+        public string Name { get { return name_.ToString(); } }
+        public double Value
+        {
+            get { return value_; }
+            set { value_ = value; }
+        }
 
-        private char value_;
+        private char    name_;
+        private double  value_;
     }
 }

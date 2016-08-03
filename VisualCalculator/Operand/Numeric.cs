@@ -14,6 +14,10 @@ namespace VisualCalculator.Operand
         }
 
         public string Name { get { return value_.ToString(); } }
+        public double Value
+        {
+            get { return value_; }
+        }
 
         private double value_;
     }
