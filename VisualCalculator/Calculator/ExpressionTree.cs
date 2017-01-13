@@ -97,13 +97,15 @@ namespace VisualCalculator.Calculator
 
         private Node CreateNode(IObject _data)
         {
-            var label = new Label();
-            label.Anchor = AnchorStyles.Top;
-            label.AutoSize = true;
-            label.BackColor = Color.SkyBlue;
-            label.Padding = new Padding(3);
-            label.Location = createPos_;
-            label.Text = _data.Name;
+            var label = new Label()
+            {
+                Anchor = AnchorStyles.Top,
+                AutoSize = true,
+                BackColor = Color.SkyBlue,
+                Padding = new Padding(3),
+                Location = createPos_,
+                Text = _data.Name
+            };
             panel_.Controls.Add(label);
             return new Node() { Data = _data, Item = label };
         }
@@ -130,24 +132,35 @@ namespace VisualCalculator.Calculator
             if (_node == null)
                 return 0.0;
 
-            if (_node.Data is IOperator)
+            switch (_node.Data)
             {
-                var oper = _node.Data as IOperator;
-                if (oper is IBinaryOper)
+            case IOperator oper:
                 {
-                    double leftResult = await Evaluate(_node.Left);
-                    double rightResult = await Evaluate(_node.Right);
-                    return (oper as IBinaryOper).Calc(leftResult, rightResult);
+                    switch (oper)
+                    {
+                    case IBinaryOper binary:
+                        {
+                            double leftResult = await Evaluate(_node.Left);
+                            double rightResult = await Evaluate(_node.Right);
+                            return binary.Calc(leftResult, rightResult);
+                        }
+                    case IUnaryOper unary:
+                        {
+                            double result = await Evaluate(_node.Right);
+                            return unary.Calc(result);
+                        }
+                    case null:
+                    default:
+                        return 0.0;
+                    }
                 }
-                else
+            case IOperand operand:
                 {
-                    double result = await Evaluate(_node.Right);
-                    return (oper as IUnaryOper).Calc(result);
+                    return operand.Value;
                 }
-            }
-            else
-            {
-                return (_node.Data as IOperand).Value;
+            case null:
+            default:
+                return 0.0;
             }
         }
 
@@ -156,9 +169,8 @@ namespace VisualCalculator.Calculator
             if (_node == null)
                 return;
 
-            if (_node.Data is Variable)
+            if (_node.Data is Variable var)
             {
-                var var = _node.Data as Variable;
                 if (var.Name == _name.ToString())
                 {
                     var.Value = _value;

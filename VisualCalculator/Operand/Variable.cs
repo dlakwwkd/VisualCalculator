@@ -14,11 +14,11 @@ namespace VisualCalculator.Operand
             value_ = 0.0;
         }
 
-        public string Name { get { return name_.ToString(); } }
+        public string Name { get => name_.ToString(); }
         public double Value
         {
-            get { return value_; }
-            set { value_ = value; }
+            get => value_;
+            set => value_ = value;
         }
 
         private char    name_;

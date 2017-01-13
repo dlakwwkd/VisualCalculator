@@ -13,11 +13,8 @@ namespace VisualCalculator.Operand
             value_ = _value;
         }
 
-        public string Name { get { return value_.ToString(); } }
-        public double Value
-        {
-            get { return value_; }
-        }
+        public string Name { get => value_.ToString(); }
+        public double Value{ get => value_; }
 
         private double value_;
     }

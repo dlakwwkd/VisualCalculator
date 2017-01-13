@@ -10,12 +10,9 @@ namespace VisualCalculator.Operator.Binary
     {
         public string   Name { get; } = "/";
 
-        public bool     IsLeftAssociative() { return true; }
-        public int      GetPrecedence() { return 3; }
+        public bool     IsLeftAssociative() => true;
+        public int      GetPrecedence()     => 3;
 
-        public double   Calc(double _left, double _right)
-        {
-            return _left / _right;
-        }
+        public double   Calc(double _left, double _right) => _left / _right;
     }
 }

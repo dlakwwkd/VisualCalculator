@@ -10,9 +10,6 @@ namespace VisualCalculator.Operator.Unary
     {
         public string Name { get; } = "-";
 
-        public double Calc(double _source)
-        {
-            return -_source;
-        }
+        public double Calc(double _source) => -_source;
     }
 }

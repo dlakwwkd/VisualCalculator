@@ -41,56 +41,62 @@ namespace VisualCalculator.Calculator
                 }
 
                 var oper = obj as IOperator;
-                if (oper is BracketL)
+                switch (oper)
                 {
-                    await PushStackFromInfix(oper);
-                }
-                else if (oper is BracketR)
-                {
-                    while (!(operStack_.Peek() is BracketL))
+                case BracketL l:
                     {
-                        await PopStackToPostfix();
+                        await PushStackFromInfix(oper);
                     }
-                    await PopStackAndPopInfix();
-                }
-                else
-                {
-                    while (operStack_.Any())
+                    break;
+                case BracketR r:
                     {
-                        var topOper = operStack_.Peek();
-                        if (topOper is BracketL)
-                            break;
-
-                        if (oper is IUnaryOper)
-                        {
-                            if (topOper is IUnaryOper)
-                            {
-                                await PopStackToPostfix();
-                            }
-                            break;
-                        }
-                        if (topOper is IUnaryOper)
+                        while (!(operStack_.Peek() is BracketL))
                         {
                             await PopStackToPostfix();
-                            continue;
                         }
-                        var curOper = oper as IBinaryOper;
-                        if (curOper.IsLeftAssociative())
+                        await PopStackAndPopInfix();
+                    }
+                    break;
+                default:
+                    {
+                        while (operStack_.Any())
                         {
-                            if (curOper.GetPrecedence() <= (topOper as IBinaryOper).GetPrecedence())
+                            var topOper = operStack_.Peek();
+                            if (topOper is BracketL)
+                                break;
+
+                            if (oper is IUnaryOper)
+                            {
+                                if (topOper is IUnaryOper)
+                                {
+                                    await PopStackToPostfix();
+                                }
+                                break;
+                            }
+                            if (topOper is IUnaryOper)
                             {
                                 await PopStackToPostfix();
                                 continue;
                             }
+                            var curOper = oper as IBinaryOper;
+                            if (curOper.IsLeftAssociative())
+                            {
+                                if (curOper.GetPrecedence() <= (topOper as IBinaryOper).GetPrecedence())
+                                {
+                                    await PopStackToPostfix();
+                                    continue;
+                                }
+                            }
+                            else if (curOper.GetPrecedence() < (topOper as IBinaryOper).GetPrecedence())
+                            {
+                                await PopStackToPostfix();
+                                continue;
+                            }
+                            break;
                         }
-                        else if (curOper.GetPrecedence() < (topOper as IBinaryOper).GetPrecedence())
-                        {
-                            await PopStackToPostfix();
-                            continue;
-                        }
-                        break;
+                        await PushStackFromInfix(oper);
                     }
-                    await PushStackFromInfix(oper);
+                    break;
                 }
             }
             while (operStack_.Any())
@@ -163,11 +169,13 @@ namespace VisualCalculator.Calculator
         {
             foreach (var obj in infixExpr_)
             {
-                var label = new Label();
-                label.BackColor = Color.Snow;
-                label.Margin = new Padding(1);
-                label.AutoSize = true;
-                label.Text = obj.Name;
+                var label = new Label()
+                {
+                    BackColor = Color.Snow,
+                    Margin = new Padding(1),
+                    AutoSize = true,
+                    Text = obj.Name
+                };
                 inputPanel_.Controls.Add(label);
                 await Task.Delay(200);
             }
