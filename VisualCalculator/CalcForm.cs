@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace VisualCalculator
@@ -18,33 +12,30 @@ namespace VisualCalculator
         public CalcForm()
         {
             InitializeComponent();
-            KeyDown += new KeyEventHandler(CalcForm_KeyDown);
-            panel_sya.Paint += new PaintEventHandler(panel_sya_Paint);
-            panel_exprTree.Paint += new PaintEventHandler(panel_exprTree_Paint);
+            Calculator = new Calculator.Calculator(this);
 
-            calculator_ = new Calculator.Calculator(this);
-            pen_ = new Pen(Color.Black);
+            KeyDown         += new KeyEventHandler(CalcForm_KeyDown);
+            SyaPanel.Paint  += new PaintEventHandler(panel_sya_Paint);
         }
 
-        public Panel    InputPanel { get { return panel_input; } }
-        public Panel    SyaPanel { get { return panel_sya; } }
-        public Panel    TreePanel { get { return panel_exprTree; } }
-        public Panel    ResultPanel { get { return panel_result; } }
+        public Panel    InputPanel  => panel_input;
+        public Panel    SyaPanel    => panel_sya;
+        public Panel    TreePanel   => panel_exprTree;
+        public Panel    ResultPanel => panel_result;
         public bool     InputEnable { get; set; } = true;
         public string   Expr
         {
-            get { return expression.Text; }
-            set { expression.Text = value; }
+            get => expression.Text;
+            set => expression.Text = value;
         }
 
-        public bool     GetX(out double _x) { return double.TryParse(inputX.Text, out _x); }
-        public bool     GetY(out double _y) { return double.TryParse(inputY.Text, out _y); }
-        public bool     GetZ(out double _z) { return double.TryParse(inputZ.Text, out _z); }
-        public void     SetResult(double _result)
+        public bool     GetX(out double x) => double.TryParse(inputX.Text, out x);
+        public bool     GetY(out double y) => double.TryParse(inputY.Text, out y);
+        public bool     GetZ(out double z) => double.TryParse(inputZ.Text, out z);
+        public void     SetResult(double result)
         {
-            label_result.Text = _result.ToString();
+            label_result.Text = result.ToString();
         }
-
 
         //------------------------------------------------------------------------------------
         // Private Field
@@ -93,47 +84,44 @@ namespace VisualCalculator
                 }
             }
         }
-        private void num0_Click(object sender, EventArgs e)     { if (InputEnable) calculator_.AddValue('0'); }
-        private void num1_Click(object sender, EventArgs e)     { if (InputEnable) calculator_.AddValue('1'); }
-        private void num2_Click(object sender, EventArgs e)     { if (InputEnable) calculator_.AddValue('2'); }
-        private void num3_Click(object sender, EventArgs e)     { if (InputEnable) calculator_.AddValue('3'); }
-        private void num4_Click(object sender, EventArgs e)     { if (InputEnable) calculator_.AddValue('4'); }
-        private void num5_Click(object sender, EventArgs e)     { if (InputEnable) calculator_.AddValue('5'); }
-        private void num6_Click(object sender, EventArgs e)     { if (InputEnable) calculator_.AddValue('6'); }
-        private void num7_Click(object sender, EventArgs e)     { if (InputEnable) calculator_.AddValue('7'); }
-        private void num8_Click(object sender, EventArgs e)     { if (InputEnable) calculator_.AddValue('8'); }
-        private void num9_Click(object sender, EventArgs e)     { if (InputEnable) calculator_.AddValue('9'); }
-        private void plus_Click(object sender, EventArgs e)     { if (InputEnable) calculator_.AddValue('+'); }
-        private void minus_Click(object sender, EventArgs e)    { if (InputEnable) calculator_.AddValue('-'); }
-        private void mult_Click(object sender, EventArgs e)     { if (InputEnable) calculator_.AddValue('*'); }
-        private void div_Click(object sender, EventArgs e)      { if (InputEnable) calculator_.AddValue('/'); }
-        private void x_Click(object sender, EventArgs e)        { if (InputEnable) calculator_.AddValue('x'); }
-        private void y_Click(object sender, EventArgs e)        { if (InputEnable) calculator_.AddValue('y'); }
-        private void z_Click(object sender, EventArgs e)        { if (InputEnable) calculator_.AddValue('z'); }
-        private void dot_Click(object sender, EventArgs e)      { if (InputEnable) calculator_.AddValue('.'); }
-        private void bracketL_Click(object sender, EventArgs e) { if (InputEnable) calculator_.AddValue('('); }
-        private void bracketR_Click(object sender, EventArgs e) { if (InputEnable) calculator_.AddValue(')'); }
-        private void negation_Click(object sender, EventArgs e) { if (InputEnable) calculator_.NegationProc(); }
-        private void erase_Click(object sender, EventArgs e)    { if (InputEnable) calculator_.RemoveValue(); }
-        private void ce_Click(object sender, EventArgs e)       { if (InputEnable) calculator_.Init(); }
-        private void c_Click(object sender, EventArgs e)        { if (InputEnable) calculator_.Init(); }
-        private void enter_Click(object sender, EventArgs e)    { if (InputEnable) calculator_.EnterProc(); }
 
-        private void button_calc_Click(object sender, EventArgs e)
-        {
-            calculator_.CalcProc();
-        }
+        private void num0_Click(object sender, EventArgs e)     { if (InputEnable) Calculator.AddValue('0'); }
+        private void num1_Click(object sender, EventArgs e)     { if (InputEnable) Calculator.AddValue('1'); }
+        private void num2_Click(object sender, EventArgs e)     { if (InputEnable) Calculator.AddValue('2'); }
+        private void num3_Click(object sender, EventArgs e)     { if (InputEnable) Calculator.AddValue('3'); }
+        private void num4_Click(object sender, EventArgs e)     { if (InputEnable) Calculator.AddValue('4'); }
+        private void num5_Click(object sender, EventArgs e)     { if (InputEnable) Calculator.AddValue('5'); }
+        private void num6_Click(object sender, EventArgs e)     { if (InputEnable) Calculator.AddValue('6'); }
+        private void num7_Click(object sender, EventArgs e)     { if (InputEnable) Calculator.AddValue('7'); }
+        private void num8_Click(object sender, EventArgs e)     { if (InputEnable) Calculator.AddValue('8'); }
+        private void num9_Click(object sender, EventArgs e)     { if (InputEnable) Calculator.AddValue('9'); }
+        private void plus_Click(object sender, EventArgs e)     { if (InputEnable) Calculator.AddValue('+'); }
+        private void minus_Click(object sender, EventArgs e)    { if (InputEnable) Calculator.AddValue('-'); }
+        private void mult_Click(object sender, EventArgs e)     { if (InputEnable) Calculator.AddValue('*'); }
+        private void div_Click(object sender, EventArgs e)      { if (InputEnable) Calculator.AddValue('/'); }
+        private void x_Click(object sender, EventArgs e)        { if (InputEnable) Calculator.AddValue('x'); }
+        private void y_Click(object sender, EventArgs e)        { if (InputEnable) Calculator.AddValue('y'); }
+        private void z_Click(object sender, EventArgs e)        { if (InputEnable) Calculator.AddValue('z'); }
+        private void dot_Click(object sender, EventArgs e)      { if (InputEnable) Calculator.AddValue('.'); }
+        private void bracketL_Click(object sender, EventArgs e) { if (InputEnable) Calculator.AddValue('('); }
+        private void bracketR_Click(object sender, EventArgs e) { if (InputEnable) Calculator.AddValue(')'); }
+        private void negation_Click(object sender, EventArgs e) { if (InputEnable) Calculator.NegationProc(); }
+        private void erase_Click(object sender, EventArgs e)    { if (InputEnable) Calculator.RemoveValue(); }
+        private void ce_Click(object sender, EventArgs e)       { if (InputEnable) Calculator.Init(); }
+        private void c_Click(object sender, EventArgs e)        { if (InputEnable) Calculator.Init(); }
+        private void enter_Click(object sender, EventArgs e)    { if (InputEnable) Calculator.EnterProc(); }
+
+        private void button_calc_Click(object sender, EventArgs e) => Calculator.CalcProc();
         private void button_reset_Click(object sender, EventArgs e)
         {
-            calculator_.ResetProc();
+            Calculator.ResetProc();
             inputX.Text = "";
             inputY.Text = "";
             inputZ.Text = "";
             label_result.Text = "";
-            panel_exprTree.Controls.Clear();
-            panel_exprTree.Invalidate();
+            TreePanel.Controls.Clear();
+            TreePanel.Invalidate();
         }
-
 
         // - Draw Handler
         //------------------------------------------------------------------------------------
@@ -145,28 +133,21 @@ namespace VisualCalculator
 
             var s1 = new Point(0, h);
             var e1 = new Point(p.Width, h);
-            g.DrawLine(pen_, s1.X, s1.Y, e1.X, e1.Y);
+            g.DrawLine(Pen, s1.X, s1.Y, e1.X, e1.Y);
 
             var arcSize = new Size(p.Width, p.Height - h);
             var arc1 = new Rectangle(new Point(p.Width / -2, h), arcSize);
             var arc2 = new Rectangle(new Point(p.Width / +2, h), arcSize);
-            g.DrawArc(pen_, arc1, -90, +90);
-            g.DrawArc(pen_, arc2, -90, -90);
+            g.DrawArc(Pen, arc1, -90, +90);
+            g.DrawArc(Pen, arc2, -90, -90);
 
             var s2 = new Point(p.Width / 2, (p.Height + h) / 2);
             var e2 = new Point(p.Width / 2, p.Height);
-            g.DrawLine(pen_, s2.X, s2.Y, e2.X, e2.Y);
+            g.DrawLine(Pen, s2.X, s2.Y, e2.X, e2.Y);
         }
 
-        private void panel_exprTree_Paint(object sender, PaintEventArgs e)
-        {
-        }
-
-
-        // - Variable
         //------------------------------------------------------------------------------------
-        private Calculator.Calculator   calculator_;
-        private Pen                     pen_;
-
+        private Calculator.Calculator   Calculator  { get; } = null;
+        private Pen                     Pen         { get; } = new Pen(Color.Black);
     }
 }

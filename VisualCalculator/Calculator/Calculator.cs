@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace VisualCalculator.Calculator
 {
@@ -22,82 +19,77 @@ namespace VisualCalculator.Calculator
         //------------------------------------------------------------------------------------
         // Static Field
         //------------------------------------------------------------------------------------
-        public static bool CheckValueType(char _value, ValueType _type)
+        public static bool CheckValueType(char value, ValueType type)
         {
-            try { return VALUE_KINDS[(int)_type].Contains(_value); }
-            catch { return false; }
+            return ValueTypeMap[type].Contains(value);
         }
 
-        public static ValueType GetValueType(char _value)
+        public static ValueType GetValueType(char value)
         {
             foreach (ValueType type in Enum.GetValues(typeof(ValueType)))
             {
-                if (CheckValueType(_value, type))
+                if (CheckValueType(value, type))
                     return type;
             }
             throw new ArgumentException("invalid argument");
         }
 
-        private static string[] VALUE_KINDS =
+        private static Dictionary<ValueType, string> ValueTypeMap { get; } = new Dictionary<ValueType, string>()
         {
-            "0123456789",   // NUMERIC
-            "xyz",          // VARIABLE
-            "+-*/",         // OPERATOR
-            ".",            // DECIMAL
-            "(",            // BRACKET_LEFT
-            ")",            // BRACKET_RIGHT
+            { ValueType.NUMERIC,        "0123456789"    },
+            { ValueType.VARIABLE,       "xyz"           },
+            { ValueType.OPERATOR,       "+-*/"          },
+            { ValueType.DECIMAL,        "."             },
+            { ValueType.BRACKET_LEFT,   "("             },
+            { ValueType.BRACKET_RIGHT,  ")"             },
         };
-
-
 
         //------------------------------------------------------------------------------------
         // Public Field
         //------------------------------------------------------------------------------------
-        public Calculator(CalcForm _form)
+        public Calculator(CalcForm form)
         {
-            form_ = _form;
-            bracketStack_ = 0;
-            decimalUsed_ = false;
-            sya_ = new ShuntingYardAlgorithm();
-            exprTree_ = new ExpressionTree();
+            Form = form;
         }
 
         public void Init()
         {
-            form_.Expr = "0";
-            bracketStack_ = 0;
-            decimalUsed_ = false;
+            Form.Expr       = "0";
+            BracketStack    = 0;
+            DecimalUsed     = false;
         }
 
-        public void AddValue(char _value)
+        public void AddValue(char value)
         {
             try
             {
-                var type = GetValueType(_value);
-                if (form_.Expr == "0" && type != ValueType.DECIMAL)
-                    form_.Expr = "";
-
+                var type = GetValueType(value);
+                if (type != ValueType.DECIMAL && Form.Expr == "0")
+                {
+                    Form.Expr = "";
+                }
                 if (CheckAddAble(type))
                 {
                     if (type == ValueType.NUMERIC)
                     {
-                        if (!decimalUsed_
-                            && _value == '0'
-                            && form_.Expr.Any()
-                            && form_.Expr.Last() == '0')
+                        if (!DecimalUsed
+                            && value == '0'
+                            && Form.Expr.Any()
+                            && Form.Expr.Last() == '0')
                             return;
                     }
                     else
                     {
-                        decimalUsed_ = false;
+                        DecimalUsed = false;
                     }
+
                     switch (type)
                     {
-                        case ValueType.DECIMAL: decimalUsed_ = true; break;
-                        case ValueType.BRACKET_LEFT: ++bracketStack_; break;
-                        case ValueType.BRACKET_RIGHT: --bracketStack_; break;
+                        case ValueType.DECIMAL:         DecimalUsed = true;     break;
+                        case ValueType.BRACKET_LEFT:    ++BracketStack;         break;
+                        case ValueType.BRACKET_RIGHT:   --BracketStack;         break;
                     }
-                    form_.Expr += _value;
+                    Form.Expr += value;
                 }
             }
             catch (ArgumentException ae)
@@ -108,18 +100,18 @@ namespace VisualCalculator.Calculator
 
         public void RemoveValue()
         {
-            var expr = form_.Expr;
+            var expr = Form.Expr;
             if (expr.Any())
             {
                 try
                 {
                     switch (GetValueType(expr.Last()))
                     {
-                        case ValueType.DECIMAL: decimalUsed_ = false; break;
-                        case ValueType.BRACKET_LEFT: --bracketStack_; break;
-                        case ValueType.BRACKET_RIGHT: ++bracketStack_; break;
+                        case ValueType.DECIMAL:         DecimalUsed = false;    break;
+                        case ValueType.BRACKET_LEFT:    --BracketStack;         break;
+                        case ValueType.BRACKET_RIGHT:   ++BracketStack;         break;
                     }
-                    form_.Expr = expr.Substring(0, expr.Length - 1);
+                    Form.Expr = expr.Substring(0, expr.Length - 1);
                 }
                 catch (ArgumentException ae)
                 {
@@ -130,12 +122,15 @@ namespace VisualCalculator.Calculator
 
         public void NegationProc()
         {
-            var expr = form_.Expr;
+            var expr = Form.Expr;
             if (!expr.Any())
                 return;
 
             ValueType lastValueType;
-            try { lastValueType = GetValueType(expr.Last()); }
+            try
+            {
+                lastValueType = GetValueType(expr.Last());
+            }
             catch (ArgumentException ae)
             {
                 Console.WriteLine(ae.Message);
@@ -169,8 +164,9 @@ namespace VisualCalculator.Calculator
                     while (--idx > 0)
                     {
                         if (CheckValueType(expr[idx], ValueType.BRACKET_RIGHT))
+                        {
                             ++bracketStack;
-
+                        }
                         if (CheckValueType(expr[idx], ValueType.BRACKET_LEFT)
                             && --bracketStack == 0) // 이 연산 순서가 바뀌면 안되는 점에 유의(왼괄호 일치확인-> 스택감산-> 0인지 확인)
                         {
@@ -202,74 +198,73 @@ namespace VisualCalculator.Calculator
             if (idx == 0 && expr[idx] == '-')
             {
                 // [예: -x => x]
-                form_.Expr = expr.Remove(idx, 1);
+                Form.Expr = expr.Remove(idx, 1);
             }
             else if (idx > 1 && expr[idx - 1] == '-'
                 && (CheckValueType(expr[idx - 2], ValueType.OPERATOR)
                     || CheckValueType(expr[idx - 2], ValueType.BRACKET_LEFT)))
             {
                 // [예: x*-y => x*y , (-x... => (x...]
-                form_.Expr = expr.Remove(idx - 1, 1);
+                Form.Expr = expr.Remove(idx - 1, 1);
             }
             else
             {
                 // 나머지 경우는 음수화부호를 추가해줘야 하는 경우이다.
-                form_.Expr = expr.Insert(idx, "-");
+                Form.Expr = expr.Insert(idx, "-");
             }
         }
 
         public void EnterProc()
         {
-            if (!form_.Expr.Any()
-                || bracketStack_ > 0
-                || CheckValueType(form_.Expr.Last(), ValueType.OPERATOR)
-                || CheckValueType(form_.Expr.Last(), ValueType.DECIMAL)
-                || CheckValueType(form_.Expr.Last(), ValueType.BRACKET_LEFT))
+            if (!Form.Expr.Any()
+                || BracketStack > 0
+                || CheckValueType(Form.Expr.Last(), ValueType.OPERATOR)
+                || CheckValueType(Form.Expr.Last(), ValueType.DECIMAL)
+                || CheckValueType(Form.Expr.Last(), ValueType.BRACKET_LEFT))
                 return;
 
-            bracketStack_ = 0;
-            decimalUsed_ = false;
+            BracketStack = 0;
+            DecimalUsed = false;
             Run();
         }
 
         public async void CalcProc()
         {
-            if (form_.GetX(out double x))
+            if (Form.GetX(out double x))
             {
-                await exprTree_.SetVariable('x', x);
+                await ExprTree.SetVariable('x', x);
             }
-            if (form_.GetY(out double y))
+            if (Form.GetY(out double y))
             {
-                await exprTree_.SetVariable('y', y);
+                await ExprTree.SetVariable('y', y);
             }
-            if (form_.GetZ(out double z))
+            if (Form.GetZ(out double z))
             {
-                await exprTree_.SetVariable('z', z);
+                await ExprTree.SetVariable('z', z);
             }
-            form_.ResultPanel.Enabled = false;
-            form_.SetResult(await exprTree_.Evaluate());
-            form_.ResultPanel.Enabled = true;
+            Form.ResultPanel.Enabled = false;
+            Form.SetResult(await ExprTree.Evaluate());
+            Form.ResultPanel.Enabled = true;
         }
 
         public void ResetProc()
         {
-            form_.TreePanel.Enabled = false;
-            form_.ResultPanel.Enabled = false;
-            form_.InputEnable = true;
-            form_.InputPanel.Select();
+            Form.ResultPanel.Enabled = false;
+            Form.TreePanel.Enabled = false;
+            Form.InputEnable = true;
+            Form.InputPanel.Select();
         }
-
 
         //------------------------------------------------------------------------------------
         // Private Field
         //------------------------------------------------------------------------------------
-        private bool CheckAddAble(ValueType _type)
+        private bool CheckAddAble(ValueType type)
         {
-            var expr = form_.Expr;
+            var expr = Form.Expr;
             if (expr.Any())
-                return CheckAddAble(_type, GetValueType(expr.Last()));
+                return CheckAddAble(type, GetValueType(expr.Last()));
 
-            switch (_type)
+            switch (type)
             {
                 case ValueType.OPERATOR:
                 case ValueType.DECIMAL:
@@ -280,40 +275,40 @@ namespace VisualCalculator.Calculator
             }
         }
 
-        private bool CheckAddAble(ValueType _input, ValueType _lastValue)
+        private bool CheckAddAble(ValueType input, ValueType lastValue)
         {
-            switch (_input)
+            switch (input)
             {
                 case ValueType.NUMERIC:
-                    return _lastValue == ValueType.VARIABLE
-                        || _lastValue == ValueType.BRACKET_RIGHT
+                    return lastValue == ValueType.VARIABLE
+                        || lastValue == ValueType.BRACKET_RIGHT
                         ? false : true;
 
                 case ValueType.OPERATOR:
-                    return _lastValue == ValueType.OPERATOR
-                        || _lastValue == ValueType.DECIMAL
-                        || _lastValue == ValueType.BRACKET_LEFT
+                    return lastValue == ValueType.OPERATOR
+                        || lastValue == ValueType.DECIMAL
+                        || lastValue == ValueType.BRACKET_LEFT
                         ? false : true;
 
                 case ValueType.VARIABLE:
-                    return _lastValue == ValueType.VARIABLE
-                        || _lastValue == ValueType.DECIMAL
-                        || _lastValue == ValueType.BRACKET_RIGHT
+                    return lastValue == ValueType.VARIABLE
+                        || lastValue == ValueType.DECIMAL
+                        || lastValue == ValueType.BRACKET_RIGHT
                         ? false : true;
 
                 case ValueType.DECIMAL:
-                    return decimalUsed_
-                        || _lastValue != ValueType.NUMERIC
+                    return DecimalUsed
+                        || lastValue != ValueType.NUMERIC
                         ? false : true;
 
                 case ValueType.BRACKET_LEFT:
-                    return _lastValue == ValueType.DECIMAL
+                    return lastValue == ValueType.DECIMAL
                         ? false : true;
 
                 case ValueType.BRACKET_RIGHT:
-                    return bracketStack_ < 1
-                        || _lastValue == ValueType.DECIMAL
-                        || _lastValue == ValueType.BRACKET_LEFT
+                    return BracketStack < 1
+                        || lastValue == ValueType.DECIMAL
+                        || lastValue == ValueType.BRACKET_LEFT
                         ? false : true;
 
                 default:
@@ -326,33 +321,30 @@ namespace VisualCalculator.Calculator
             List<IObject> infixExpr = new List<IObject>();
             try
             {
-                Parser.StringToInfixExpr(form_.Expr, infixExpr);
+                Parser.StringToInfixExpr(Form.Expr, infixExpr);
             }
             catch (ArgumentException ae)
             {
                 Console.WriteLine(ae.Message);
                 return;
             }
-            form_.InputEnable = false;
-            form_.SyaPanel.Enabled = true;
+            Form.InputEnable = false;
+            Form.SyaPanel.Enabled = true;
 
-            var postfixExpr = await sya_.Run(form_.SyaPanel, infixExpr);
+            var postfixExpr = await Sya.Run(Form.SyaPanel, infixExpr);
 
-            form_.SyaPanel.Enabled = false;
-            form_.TreePanel.Enabled = true;
+            Form.SyaPanel.Enabled = false;
+            Form.TreePanel.Enabled = true;
 
-            await exprTree_.BuildTree(form_.TreePanel, postfixExpr);
+            await ExprTree.BuildTree(Form.TreePanel, postfixExpr);
 
-            form_.ResultPanel.Enabled = true;
+            Form.ResultPanel.Enabled = true;
         }
-
-
-
-        private CalcForm                form_;
-        private int                     bracketStack_;
-        private bool                    decimalUsed_;
-
-        private ShuntingYardAlgorithm   sya_;
-        private ExpressionTree          exprTree_;
+        
+        private CalcForm                Form            { get; }        = null;
+        private ShuntingYardAlgorithm   Sya             { get; }        = new ShuntingYardAlgorithm();
+        private ExpressionTree          ExprTree        { get; }        = new ExpressionTree();
+        private int                     BracketStack    { get; set; }   = 0;
+        private bool                    DecimalUsed     { get; set; }   = false;
     }
 }

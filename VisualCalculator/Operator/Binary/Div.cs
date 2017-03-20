@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace VisualCalculator.Operator.Binary
+﻿namespace VisualCalculator.Operator.Binary
 {
     class Div : IBinaryOper
     {
         public string   Name { get; } = "/";
 
+        public double   Calc(double left, double right)
+            => left / right;
+
         public bool     IsLeftAssociative() => true;
         public int      GetPrecedence()     => 3;
-
-        public double   Calc(double _left, double _right) => _left / _right;
     }
 }

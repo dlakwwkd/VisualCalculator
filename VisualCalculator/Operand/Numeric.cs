@@ -1,21 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace VisualCalculator.Operand
+﻿namespace VisualCalculator.Operand
 {
     class Numeric : IOperand
     {
-        public Numeric(double _value)
+        public Numeric(double value)
         {
-            value_ = _value;
+            Value = value;
         }
 
-        public string Name { get => value_.ToString(); }
-        public double Value{ get => value_; }
-
-        private double value_;
+        public double Value { get; }
+        public string Name => Value.ToString();
     }
 }

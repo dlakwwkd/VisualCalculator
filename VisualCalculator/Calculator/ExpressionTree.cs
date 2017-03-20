@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using VisualCalculator.Operand;
@@ -16,25 +13,25 @@ namespace VisualCalculator.Calculator
     {
         class Node
         {
-            public IObject  Data { get; set; }
-            public Label    Item { get; set; }
-            public Node     Left { get; set; }
-            public Node     Right { get; set; }
+            public IObject  Data { get; set; }  = null;
+            public Label    Item { get; set; }  = null;
+            public Node     Left { get; set; }  = null;
+            public Node     Right { get; set; } = null;
         }
 
         //------------------------------------------------------------------------------------
         // Public Field
         //------------------------------------------------------------------------------------
-        public async Task BuildTree(Panel _panel, List<IObject> _postfixExpr)
+        public async Task BuildTree(Panel panel, List<IObject> postfixExpr)
         {
-            _panel.Controls.Clear();
-            _panel.Invalidate();
+            panel.Controls.Clear();
+            panel.Invalidate();
 
-            panel_ = _panel;
+            panel_ = panel;
             createPos_ = new Point(panel_.Width / 2, 0);
             gabX_ = panel_.Width / 2;
             gabY_ = 60;
-            rootNode_ = await BuildTree(new Stack<IObject>(_postfixExpr));
+            rootNode_ = await BuildTree(new Stack<IObject>(postfixExpr));
         }
 
         public async Task<double> Evaluate()
@@ -47,16 +44,14 @@ namespace VisualCalculator.Calculator
             await SetVariable(_name, _value, rootNode_);
         }
 
-
-
         //------------------------------------------------------------------------------------
         // Private Field
         //------------------------------------------------------------------------------------
-        private async Task<Node> BuildTree(Stack<IObject> _postfixExpr)
+        private async Task<Node> BuildTree(Stack<IObject> postfixExpr)
         {
             // _postfixExpr의 마지막 요소는 무조건 operand이기 때문에 다음 재귀를 호출하지 않는다.
             // 따라서 여기에 들어왔다는건 요소가 반드시 하나 이상 있다는 의미이다.
-            var node = CreateNode(_postfixExpr.Pop());
+            var node = CreateNode(postfixExpr.Pop());
 
             await Task.Delay(500);
 
@@ -68,12 +63,12 @@ namespace VisualCalculator.Calculator
                     createPos_.Y += gabY_;
                     createPos_.X += (int)gabX_;
 
-                    node.Right = await BuildTree(_postfixExpr);
+                    node.Right = await BuildTree(postfixExpr);
                     await DrawLine(node, node.Right);
 
                     createPos_.X -= (int)(gabX_ * 2);
 
-                    node.Left = await BuildTree(_postfixExpr);
+                    node.Left = await BuildTree(postfixExpr);
                     await DrawLine(node, node.Left);
 
                     createPos_.X += (int)gabX_;
@@ -83,7 +78,7 @@ namespace VisualCalculator.Calculator
                 {
                     createPos_.Y += gabY_;
 
-                    node.Right = await BuildTree(_postfixExpr);
+                    node.Right = await BuildTree(postfixExpr);
                     await DrawLine(node, node.Right);
 
                     createPos_.Y -= gabY_;
@@ -95,7 +90,7 @@ namespace VisualCalculator.Calculator
             return node;
         }
 
-        private Node CreateNode(IObject _data)
+        private Node CreateNode(IObject data)
         {
             var label = new Label()
             {
@@ -104,35 +99,35 @@ namespace VisualCalculator.Calculator
                 BackColor = Color.SkyBlue,
                 Padding = new Padding(3),
                 Location = createPos_,
-                Text = _data.Name
+                Text = data.Name
             };
             panel_.Controls.Add(label);
-            return new Node() { Data = _data, Item = label };
+            return new Node() { Data = data, Item = label };
         }
 
-        private async Task DrawLine(Node _parent, Node _child)
+        private async Task DrawLine(Node parent, Node child)
         {
-            if (_parent == null || _child == null)
+            if (parent == null || child == null)
                 return;
 
             var g = panel_.CreateGraphics();
             var p = new Pen(Color.DarkBlue);
-            var sizeP = _parent.Item.Size;
-            var sizeC = _child.Item.Size;
+            var sizeP = parent.Item.Size;
+            var sizeC = child.Item.Size;
             sizeP.Width /= 2;
             sizeP.Height /= 2;
             sizeC.Width /= 2;
             sizeC.Height /= 2;
-            g.DrawLine(p, _parent.Item.Location + sizeP, _child.Item.Location + sizeC);
+            g.DrawLine(p, parent.Item.Location + sizeP, child.Item.Location + sizeC);
             await Task.Delay(300);
         }
 
-        private async Task<double> Evaluate(Node _node)
+        private async Task<double> Evaluate(Node node)
         {
-            if (_node == null)
+            if (node == null)
                 return 0.0;
 
-            switch (_node.Data)
+            switch (node.Data)
             {
             case IOperator oper:
                 {
@@ -140,13 +135,13 @@ namespace VisualCalculator.Calculator
                     {
                     case IBinaryOper binary:
                         {
-                            double leftResult = await Evaluate(_node.Left);
-                            double rightResult = await Evaluate(_node.Right);
+                            double leftResult = await Evaluate(node.Left);
+                            double rightResult = await Evaluate(node.Right);
                             return binary.Calc(leftResult, rightResult);
                         }
                     case IUnaryOper unary:
                         {
-                            double result = await Evaluate(_node.Right);
+                            double result = await Evaluate(node.Right);
                             return unary.Calc(result);
                         }
                     case null:
@@ -164,24 +159,22 @@ namespace VisualCalculator.Calculator
             }
         }
 
-        private async Task SetVariable(char _name, double _value, Node _node)
+        private async Task SetVariable(char name, double value, Node node)
         {
-            if (_node == null)
+            if (node == null)
                 return;
 
-            if (_node.Data is Variable var)
+            if (node.Data is Variable var)
             {
-                if (var.Name == _name.ToString())
+                if (var.Name == name.ToString())
                 {
-                    var.Value = _value;
-                    _node.Item.Text = _name + ": " + _value;
+                    var.Value = value;
+                    node.Item.Text = name + ": " + value;
                 }
             }
-            await SetVariable(_name, _value, _node.Left);
-            await SetVariable(_name, _value, _node.Right);
+            await SetVariable(name, value, node.Left);
+            await SetVariable(name, value, node.Right);
         }
-
-
 
         Panel   panel_;
         Point   createPos_;

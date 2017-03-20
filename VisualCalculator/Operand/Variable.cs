@@ -1,27 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace VisualCalculator.Operand
+﻿namespace VisualCalculator.Operand
 {
     class Variable : IOperand
     {
-        public Variable(char _name)
+        public Variable(char name)
         {
-            name_ = _name;
-            value_ = 0.0;
+            Name = name.ToString();
         }
 
-        public string Name { get => name_.ToString(); }
-        public double Value
-        {
-            get => value_;
-            set => value_ = value;
-        }
-
-        private char    name_;
-        private double  value_;
+        public double Value { get; set; } = 0.0;
+        public string Name  { get; }
     }
 }

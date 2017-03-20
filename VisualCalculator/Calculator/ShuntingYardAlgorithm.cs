@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing;
@@ -17,10 +16,10 @@ namespace VisualCalculator.Calculator
         //------------------------------------------------------------------------------------
         // Public Field
         //------------------------------------------------------------------------------------
-        public async Task<List<IObject>> Run(Panel _panel, List<IObject> _infixExpr)
+        public async Task<List<IObject>> Run(Panel panel, List<IObject> infixExpr)
         {
-            Init(_panel);
-            infixExpr_ = _infixExpr;
+            Init(panel);
+            infixExpr_ = infixExpr;
             postfixExpr_.Clear();
             operStack_.Clear();
 
@@ -104,9 +103,9 @@ namespace VisualCalculator.Calculator
                 await PopStackToPostfix();
             }
 
-            _panel.Controls.Remove(inputPanel_);
-            _panel.Controls.Remove(infixPanel_);
-            _panel.Controls.Remove(stackPanel_);
+            panel.Controls.Remove(inputPanel_);
+            panel.Controls.Remove(infixPanel_);
+            panel.Controls.Remove(stackPanel_);
 
             return postfixExpr_;
         }
@@ -116,17 +115,17 @@ namespace VisualCalculator.Calculator
         //------------------------------------------------------------------------------------
         // Private Field
         //------------------------------------------------------------------------------------
-        private void Init(Panel _panel)
+        private void Init(Panel panel)
         {
-            _panel.Controls.Remove(inputPanel_);
-            _panel.Controls.Remove(infixPanel_);
-            _panel.Controls.Remove(postfixPanel_);
-            _panel.Controls.Remove(stackPanel_);
+            panel.Controls.Remove(inputPanel_);
+            panel.Controls.Remove(infixPanel_);
+            panel.Controls.Remove(postfixPanel_);
+            panel.Controls.Remove(stackPanel_);
 
             inputPanel_.Controls.Clear();
             inputPanel_.FlowDirection = FlowDirection.LeftToRight;
             inputPanel_.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            inputPanel_.Location = new Point(_panel.Width - 5, 5);
+            inputPanel_.Location = new Point(panel.Width - 5, 5);
             inputPanel_.Padding = new Padding(3);
             inputPanel_.Size = new Size(5, 5);
             inputPanel_.AutoSize = true;
@@ -135,7 +134,7 @@ namespace VisualCalculator.Calculator
             infixPanel_.Controls.Clear();
             infixPanel_.FlowDirection = FlowDirection.LeftToRight;
             infixPanel_.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            infixPanel_.Location = new Point(_panel.Width - 5, 30);
+            infixPanel_.Location = new Point(panel.Width - 5, 30);
             infixPanel_.Padding = new Padding(3);
             infixPanel_.Size = new Size(5, 5);
             infixPanel_.AutoSize = true;
@@ -153,16 +152,16 @@ namespace VisualCalculator.Calculator
             stackPanel_.Controls.Clear();
             stackPanel_.FlowDirection = FlowDirection.BottomUp;
             stackPanel_.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            stackPanel_.Location = new Point(_panel.Width / 2, _panel.Height);
+            stackPanel_.Location = new Point(panel.Width / 2, panel.Height);
             stackPanel_.Padding = new Padding(3);
             stackPanel_.Size = new Size(5, 5);
             stackPanel_.AutoSize = true;
             stackPanel_.BackColor = Color.Brown;
 
-            _panel.Controls.Add(inputPanel_);
-            _panel.Controls.Add(infixPanel_);
-            _panel.Controls.Add(postfixPanel_);
-            _panel.Controls.Add(stackPanel_);
+            panel.Controls.Add(inputPanel_);
+            panel.Controls.Add(infixPanel_);
+            panel.Controls.Add(postfixPanel_);
+            panel.Controls.Add(stackPanel_);
         }
 
         private async Task InputSetting()
@@ -181,7 +180,7 @@ namespace VisualCalculator.Calculator
             }
         }
 
-        private async Task MoveToPostfix(IObject _obj)
+        private async Task MoveToPostfix(IObject obj)
         {
             var item = infixPanel_.Controls[0] as Label;
             infixPanel_.Controls.Remove(item);
@@ -207,10 +206,10 @@ namespace VisualCalculator.Calculator
             });
 
             postfixPanel_.Controls.Add(item);
-            postfixExpr_.Add(_obj);
+            postfixExpr_.Add(obj);
         }
 
-        private async Task PushStackFromInfix(IOperator _oper)
+        private async Task PushStackFromInfix(IOperator oper)
         {
             var item = infixPanel_.Controls[0] as Label;
             infixPanel_.Controls.Remove(item);
@@ -234,7 +233,7 @@ namespace VisualCalculator.Calculator
             });
 
             stackPanel_.Controls.Add(item);
-            operStack_.Push(_oper);
+            operStack_.Push(oper);
         }
 
         private async Task PopStackToPostfix()
@@ -287,25 +286,25 @@ namespace VisualCalculator.Calculator
             operStack_.Pop();
         }
 
-        private async Task MoveAction(Label _item, Func<Task> _action)
+        private async Task MoveAction(Label item, Func<Task> action)
         {
             var syaPanel = infixPanel_.Parent;
-            syaPanel.Controls.Add(_item);
+            syaPanel.Controls.Add(item);
 
-            var orgF = _item.Font;
-            var orgP = _item.Padding;
-            var orgBS = _item.BorderStyle;
-            _item.Font = new Font(_item.Font, FontStyle.Bold);
-            _item.Padding = new Padding(3);
-            _item.BorderStyle = BorderStyle.FixedSingle;
+            var orgF = item.Font;
+            var orgP = item.Padding;
+            var orgBS = item.BorderStyle;
+            item.Font = new Font(item.Font, FontStyle.Bold);
+            item.Padding = new Padding(3);
+            item.BorderStyle = BorderStyle.FixedSingle;
 
-            await _action();
+            await action();
 
-            _item.Font = orgF;
-            _item.Padding = orgP;
-            _item.BorderStyle = orgBS;
+            item.Font = orgF;
+            item.Padding = orgP;
+            item.BorderStyle = orgBS;
 
-            syaPanel.Controls.Remove(_item);
+            syaPanel.Controls.Remove(item);
         }
 
 
